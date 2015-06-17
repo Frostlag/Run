@@ -1,0 +1,10 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <EditTextPreference
+        android:title="@string/min_time"
+        android:key="min_time"
+        android:summary="@string/min_time_summary" />
+    <EditTextPreference
+        android:title="@string/max_time"
+        android:key="min_time"
+        android:summary="@string/max_time_summary" />
+</PreferenceScreen>
