@@ -97,6 +97,7 @@ public class Model implements GoogleApiClient.ConnectionCallbacks, GoogleApiClie
     public void Save(){
         if (started) return;
         if (run.tracks.isEmpty()) return;
+        DialogManager.NameRun(main,run);
     }
 
     public void Pause(){

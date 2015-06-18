@@ -19,5 +19,7 @@
 
     <string name="quit_notice_title">Exiting</string>
     <string name="quit_notice_message">Cannot connect to Google API, so we\'re exiting.</string>
+
     <string name="ok">Okay</string>
+    <string name="cancel">Cancel</string>
 </resources>

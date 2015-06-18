@@ -3,6 +3,9 @@ package com.example.dingtao.run;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.EditText;
 
 /**
  * Created by Dingtao on 6/17/2015.
@@ -17,6 +20,30 @@ public class DialogManager {
                 android.os.Process.killProcess(android.os.Process.myPid());
             }
         });
+        builder.show();
+    }
+
+    public static void NameRun(Context context, final Run run){
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        LayoutInflater layoutInflater = LayoutInflater.from(context);
+        View view = layoutInflater.inflate(R.layout.dialog_edittext, null);
+        final EditText input = (EditText) view.findViewById(R.id.input);
+        builder.setTitle(R.string.quit_notice_title).setView(view).setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (input.getText().length() > 0) {
+                    run.name = input.getText().toString();
+                } else {
+                    run.name = String.valueOf(System.currentTimeMillis());
+                }
+            }
+        }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
 
     }
 }
