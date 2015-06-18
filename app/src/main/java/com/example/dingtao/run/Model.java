@@ -144,8 +144,7 @@ public class Model implements GoogleApiClient.ConnectionCallbacks, GoogleApiClie
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
-        android.os.Process.killProcess(android.os.Process.myPid());
-
+        DialogManager.QuitNotice(main);
     }
 
     protected LocationRequest createLocationRequest(){

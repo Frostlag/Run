@@ -16,4 +16,8 @@
     <string name="max_time_summary">Maximum amount of milliseconds between marker updates, no matter how inaccurate the second one is</string>
 
     <string name="title_activity_settings">Settings</string>
+
+    <string name="quit_notice_title">Exiting</string>
+    <string name="quit_notice_message">Cannot connect to Google API, so we\'re exiting.</string>
+    <string name="ok">Okay</string>
 </resources>
