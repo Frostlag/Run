@@ -123,7 +123,7 @@ public class MainActivity extends ActionBarActivity implements UpdateableView {
     public void Update(String msg) {
         if (msg == Model.TRACK_UPDATED){
             PolylineOptions options = new PolylineOptions().width(5).color(Color.BLUE).geodesic(true);
-            for (LocationJSON locationJSON : model.track){
+            for (LocationJSON locationJSON : model.run.tracks){
                 options.add(new LatLng(locationJSON.latitude,locationJSON.longitude));
             }
 

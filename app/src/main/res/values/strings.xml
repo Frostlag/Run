@@ -10,11 +10,10 @@
     <string name="Pause">Pause</string>
     <string name="Unpause">Unpause</string>
     <string name="min_time">Minimum Time</string>
-    <string name="min_time_summary">Minimum amount of time between marker updates</string>
+    <string name="min_time_summary">Minimum amount of milliseconds between marker updates</string>
 
     <string name="max_time">Maximum Time</string>
-    <string name="max_time_summary">Maximum amount of time between marker updates, no matter how inaccurate the second one is</string>
+    <string name="max_time_summary">Maximum amount of milliseconds between marker updates, no matter how inaccurate the second one is</string>
 
     <string name="title_activity_settings">Settings</string>
 </resources>
-

@@ -44,28 +44,70 @@ public class LocationJSON {
     }
 
     public LocationJSON(JSONObject location) throws JSONException{
-        accuracy = location.getDouble("Accuracy");
-        latitude = location.getDouble("Latitude");
-        longitude = location.getDouble("Longitude");
-        altitude = location.getDouble("Altitude");
-        bearing = location.getDouble("Bearing");
-        provider = location.getString("Provider");
-        time = location.getLong("Time");
-        speed = location.getDouble("Speed");
+        accuracy = location.getDouble("accuracy");
+        latitude = location.getDouble("latitude");
+        longitude = location.getDouble("longitude");
+        altitude = location.getDouble("altitude");
+        bearing = location.getDouble("bearing");
+        provider = location.getString("provider");
+        time = location.getLong("time");
+        speed = location.getDouble("speed");
     }
 
     public JSONObject ToJSONObject() throws JSONException{
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("Accuracy",accuracy);
-        jsonObject.put("Latitude",latitude);
-        jsonObject.put("Longitude",longitude);
-        jsonObject.put("Altitude",altitude);
-        jsonObject.put("Bearing",bearing);
-        jsonObject.put("Provider",provider);
-        jsonObject.put("Time",time);
-        jsonObject.put("Speed",speed);
+        jsonObject.put("accuracy",accuracy);
+        jsonObject.put("latitude", latitude);
+        jsonObject.put("longitude", longitude);
+        jsonObject.put("altitude", altitude);
+        jsonObject.put("bearing", bearing);
+        jsonObject.put("provider", provider);
+        jsonObject.put("time", time);
+        jsonObject.put("speed", speed);
 
         return jsonObject;
+    }
+
+    protected boolean IsBetterLocation(LocationJSON location) {
+
+        // Check whether the new location fix is newer or older
+        long timeDelta = location.time - time;
+        boolean isSignificantlyNewer = timeDelta > Model.Get().max_time;
+        boolean isSignificantlyOlder = timeDelta < -Model.Get().max_time;
+        boolean isNewer = timeDelta > 0;
+
+        // If it's been more than two minutes since the current location, use the new location
+        // because the user has likely moved
+        if (isSignificantlyNewer) {
+            return true;
+            // If the new location is more than two minutes older, it must be worse
+        } else if (isSignificantlyOlder) {
+            return false;
+        }
+
+        // Check whether the new location fix is more or less accurate
+        int accuracyDelta = (int) (location.accuracy - accuracy);
+        boolean isLessAccurate = accuracyDelta > 0;
+        boolean isMoreAccurate = accuracyDelta < 0;
+        boolean isSignificantlyLessAccurate = accuracyDelta > 200;
+
+        // Check if the old and new location are from the same provider
+        boolean isFromSameProvider = IsSameProvider(location);
+
+        // Determine location quality using a combination of timeliness and accuracy
+        if (isMoreAccurate) {
+            return true;
+        } else if (isNewer && !isLessAccurate) {
+            return true;
+        } else if (isNewer && !isSignificantlyLessAccurate && isFromSameProvider) {
+            return true;
+        }
+        return false;
+    }
+
+    /** Checks whether two providers are the same */
+    private boolean IsSameProvider(LocationJSON location) {
+        return provider.equals(location.provider);
     }
 
 }
