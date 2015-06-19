@@ -22,4 +22,8 @@
 
     <string name="ok">Okay</string>
     <string name="cancel">Cancel</string>
+
+    <string name="initial_speed">Speed: 0.00</string>
+    <string name="initial_distance">Distance: 0.00</string>
+    <string name="initial_time">Time: 0:00</string>
 </resources>

@@ -72,15 +72,12 @@ public class LocationJSON {
 
         // Check whether the new location fix is newer or older
         long timeDelta = location.time - time;
-        boolean isSignificantlyNewer = timeDelta > Model.Get().max_time;
-        boolean isSignificantlyOlder = timeDelta < -Model.Get().max_time;
+        boolean isSignificantlyNewer = timeDelta > Model.max_time;
+        boolean isSignificantlyOlder = timeDelta < -Model.max_time;
         boolean isNewer = timeDelta > 0;
 
-        // If it's been more than two minutes since the current location, use the new location
-        // because the user has likely moved
         if (isSignificantlyNewer) {
             return true;
-            // If the new location is more than two minutes older, it must be worse
         } else if (isSignificantlyOlder) {
             return false;
         }
