@@ -23,7 +23,7 @@ public class DialogManager {
         builder.show();
     }
 
-    public static void NameRun(Context context, final Run run){
+    public static boolean NameRun(Context context, final Run run){
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         View view = layoutInflater.inflate(R.layout.dialog_edittext, null);

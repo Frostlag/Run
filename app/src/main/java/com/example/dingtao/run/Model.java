@@ -30,6 +30,7 @@ public class Model implements GoogleApiClient.ConnectionCallbacks, GoogleApiClie
     public boolean started,paused;
     public static int min_time,max_time;
     public Run run;
+    public List<Run> runs;
 
     private GoogleApiClient mGoogleApiClient;
 
@@ -54,14 +55,14 @@ public class Model implements GoogleApiClient.ConnectionCallbacks, GoogleApiClie
         main = context;
         SP = PreferenceManager.getDefaultSharedPreferences(context);
         views = new ArrayList<UpdateableView>();
-        Log.d("Test","Connecting");
+        runs = new ArrayList<Run>();
         mGoogleApiClient = new GoogleApiClient.Builder(main).addApi(LocationServices.API).addConnectionCallbacks(this).addOnConnectionFailedListener(this).build();
         mGoogleApiClient.connect();
     }
 
     public void ReloadPreferences(){
         min_time = Integer.valueOf(SP.getString("min_time", "3000"));
-        max_time = Integer.valueOf(SP.getString("max_time","30000"));
+        max_time = Integer.valueOf(SP.getString("max_time", "30000"));
     }
 
     public static Model Get(){
@@ -100,7 +101,8 @@ public class Model implements GoogleApiClient.ConnectionCallbacks, GoogleApiClie
     public void Save(){
         if (started) return;
         if (run.tracks.isEmpty()) return;
-        DialogManager.NameRun(main,run);
+        if (DialogManager.NameRun(main,run))
+            runs.add(run);
     }
 
     public void Pause(){
