@@ -16,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
@@ -31,6 +32,7 @@ import com.google.android.gms.maps.model.PolylineOptions;
 
 public class MainActivity extends ActionBarActivity implements UpdateableView {
     Button startButton,pauseButton,saveButton;
+    TextView speed,time,distance;
     Model model;
     GoogleMap map;
     Polyline line;
@@ -43,15 +45,16 @@ public class MainActivity extends ActionBarActivity implements UpdateableView {
 
         model = Model.Model(this);
         startButton = (Button) findViewById(R.id.Start);
+        saveButton = (Button) findViewById(R.id.Save);
+        speed = (TextView) findViewById(R.id.speed);
+        time = (TextView) findViewById(R.id.time);
+        distance = (TextView) findViewById(R.id.distance);
+
         //TODO:pauseButton = (Button) findViewById(R.id.Pause);
 
         map = ((MapFragment) getFragmentManager().findFragmentById(R.id.Map)).getMap();
 
         map.setMyLocationEnabled(true);
-
-
-
-
     }
 
     @Override
@@ -115,7 +118,7 @@ public class MainActivity extends ActionBarActivity implements UpdateableView {
         startActivity(intent);
     }
 
-    public void Save(MenuItem item){
+    public void Save(View view){
         model.Save();
     }
 
@@ -126,11 +129,13 @@ public class MainActivity extends ActionBarActivity implements UpdateableView {
             for (LocationJSON locationJSON : model.run.tracks){
                 options.add(new LatLng(locationJSON.latitude,locationJSON.longitude));
             }
-
             if (line != null){
                 map.clear();
             }
-            map.addPolyline(options);
+            line = map.addPolyline(options);
+
+            speed.setText("Speed: " + String.format("%1$,.2f",model.run.tracks.get(model.run.tracks.size() - 1).speed));
+            distance.setText("Distance: " + String.format("%1$,.2f",model.run.distance));
         }
 
     }

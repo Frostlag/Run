@@ -1,6 +1,7 @@
 package com.example.dingtao.run;
 
 import android.location.Location;
+import android.util.Log;
 
 
 import com.google.android.gms.location.LocationServices;
@@ -23,17 +24,22 @@ public class Run {
     public long duration;
     public long begin;
 
+
     public void Calc(){
 
     }
 
-    public void AddLocation(Location location){
+    public boolean AddLocation(Location location){
         LocationJSON locationJSON = new LocationJSON(location);
         LocationJSON lastLocation = tracks.get(tracks.size()-1);
-        if (!lastLocation.IsBetterLocation(locationJSON)) return;
+        if (!lastLocation.IsBetterLocation(locationJSON)) return false;
         else{
             tracks.add(locationJSON);
             distance += location.distanceTo(lastLocation.ToLocation());
+            duration = tracks.get(tracks.size()-1).time - tracks.get(0).time;
+            Log.i("OLD LOCATION", lastLocation.toString());
+            Log.i("NEW LOCATION", location.toString());
+            return true;
         }
     }
 

@@ -28,8 +28,9 @@ import java.util.List;
 public class Model implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,LocationListener{
     public static String TRACK_UPDATED = "TRACK UPDATED";
     public boolean started,paused;
-    public int min_time,max_time;
+    public static int min_time,max_time;
     public Run run;
+    public List<Run> runs;
 
     private GoogleApiClient mGoogleApiClient;
 
@@ -54,14 +55,14 @@ public class Model implements GoogleApiClient.ConnectionCallbacks, GoogleApiClie
         main = context;
         SP = PreferenceManager.getDefaultSharedPreferences(context);
         views = new ArrayList<UpdateableView>();
-        Log.d("Test","Connecting");
+        runs = new ArrayList<Run>();
         mGoogleApiClient = new GoogleApiClient.Builder(main).addApi(LocationServices.API).addConnectionCallbacks(this).addOnConnectionFailedListener(this).build();
         mGoogleApiClient.connect();
     }
 
     public void ReloadPreferences(){
-        min_time = SP.getInt("min_time", 0);
-        max_time = SP.getInt("max_time",300);
+        min_time = Integer.valueOf(SP.getString("min_time", "3000"));
+        max_time = Integer.valueOf(SP.getString("max_time", "30000"));
     }
 
     public static Model Get(){
@@ -91,12 +92,17 @@ public class Model implements GoogleApiClient.ConnectionCallbacks, GoogleApiClie
     }
 
     public void AddLocation(Location location){
-        run.AddLocation(location);
+
+        if (run.AddLocation(location)){
+            Update(TRACK_UPDATED);
+        }
     }
 
     public void Save(){
         if (started) return;
         if (run.tracks.isEmpty()) return;
+        if (DialogManager.NameRun(main,run))
+            runs.add(run);
     }
 
     public void Pause(){
@@ -144,14 +150,14 @@ public class Model implements GoogleApiClient.ConnectionCallbacks, GoogleApiClie
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
-        android.os.Process.killProcess(android.os.Process.myPid());
-
+        DialogManager.QuitNotice(main);
     }
 
     protected LocationRequest createLocationRequest(){
         LocationRequest locationRequest = new LocationRequest();
         locationRequest.setInterval(min_time);
-        locationRequest.setInterval(0);
+        locationRequest.setFastestInterval(min_time);
+        locationRequest.setMaxWaitTime(max_time);
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         return locationRequest;
 
