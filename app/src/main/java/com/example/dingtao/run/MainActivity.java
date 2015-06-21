@@ -61,7 +61,7 @@ public class MainActivity extends ActionBarActivity implements UpdateableView {
     protected void onStart(){
         super.onStart();
         model.AddView(this);
-        Update(Model.TRACK_UPDATED);
+        if (model.started) Update(Model.TRACK_UPDATED);
     }
 
     @Override

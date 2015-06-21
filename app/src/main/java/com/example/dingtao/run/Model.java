@@ -67,7 +67,6 @@ public class Model implements GoogleApiClient.ConnectionCallbacks, GoogleApiClie
         SP = PreferenceManager.getDefaultSharedPreferences(context);
         views = new ArrayList<UpdateableView>();
         runs = new ArrayList<Run>();
-        Log.d("Test","Connecting");
         LoadFromFile();
         mGoogleApiClient = new GoogleApiClient.Builder(main).addApi(LocationServices.API).addConnectionCallbacks(this).addOnConnectionFailedListener(this).build();
         mGoogleApiClient.connect();

@@ -1,14 +1,17 @@
 package com.example.dingtao.run;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.text.Layout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -26,6 +29,13 @@ public class RunsActivity extends ActionBarActivity {
         model = Model.Get();
         ListView listView = (ListView) findViewById(R.id.list);
         listView.setAdapter(new RunAdapter(this,R.layout.list_item_run,model.runs));
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(view.getContext(),RunActivity.class).putExtra("rid",i);
+                view.getContext().startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -59,7 +69,7 @@ public class RunsActivity extends ActionBarActivity {
         public View getView(int position, View convertView, ViewGroup parent){
             Run run = getItem(position);
             LayoutInflater inflator = (LayoutInflater) this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View rowView = inflator.inflate(R.layout.list_item_run,parent);
+            View rowView = inflator.inflate(R.layout.list_item_run,parent,false);
             TextView name = (TextView) rowView.findViewById(R.id.name);
             TextView time = (TextView) rowView.findViewById(R.id.time);
 

@@ -32,7 +32,7 @@ public class DialogManager {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (input.getText().length() > 0) {
-                    NoInput(context);
+                    run.name = input.getText().toString();
                 } else {
                     run.name = String.valueOf(System.currentTimeMillis());
                 }
