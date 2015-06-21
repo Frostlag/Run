@@ -90,6 +90,8 @@ public class Model implements GoogleApiClient.ConnectionCallbacks, GoogleApiClie
 
     public void Start(){
         if (started){
+            Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+            run.ForceAddLocation(location);
             started = false;
             paused = false;
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient,this);
@@ -102,8 +104,6 @@ public class Model implements GoogleApiClient.ConnectionCallbacks, GoogleApiClie
             LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient,createLocationRequest(),this);
             Location lastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
             run = new Run(lastLocation);
-
-
         }
     }
 
@@ -120,7 +120,7 @@ public class Model implements GoogleApiClient.ConnectionCallbacks, GoogleApiClie
             DialogManager.NoInput(main);
             return;
         }
-        DialogManager.NameRun(main,run);
+        DialogManager.NameRun(main, run);
     }
 
     public void WriteToFile(){

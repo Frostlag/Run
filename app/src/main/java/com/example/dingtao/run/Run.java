@@ -29,6 +29,14 @@ public class Run {
 
     }
 
+    public void ForceAddLocation(Location location){
+        LocationJSON locationJSON = new LocationJSON(location);
+        LocationJSON lastLocation = tracks.get(tracks.size()-1);
+        tracks.add(locationJSON);
+        distance += location.distanceTo(lastLocation.ToLocation());
+        duration = tracks.get(tracks.size()-1).time - tracks.get(0).time;
+    }
+
     public boolean AddLocation(Location location){
         LocationJSON locationJSON = new LocationJSON(location);
         LocationJSON lastLocation = tracks.get(tracks.size()-1);
