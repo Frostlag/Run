@@ -31,9 +31,11 @@ public class RunActivity extends ActionBarActivity {
         TextView distance = (TextView) findViewById(R.id.distance);
         TextView duration = (TextView) findViewById(R.id.duration);
         TextView averageSpeed = (TextView) findViewById(R.id.average_speed);
-
         name.setText(run.name);
-        begin.setText(String.valueOf(run.begin));
+        begin.setText("Started: " + run.begin);
+        distance.setText("Distance:" + run.distance);
+        duration.setText("Duration:" + run.duration);
+        averageSpeed.setText("Speed:" + run.averageSpeed);
         GoogleMap map = ((MapFragment) getFragmentManager().findFragmentById(R.id.Map)).getMap();
 
         PolylineOptions options = new PolylineOptions().width(5).color(Color.BLUE).geodesic(true);
