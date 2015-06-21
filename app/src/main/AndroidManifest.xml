@@ -37,6 +37,14 @@
             android:label="@string/title_activity_settings"
             android:parentActivityName=".MainActivity" >
         </activity>
+        <activity
+            android:name=".RunsActivity"
+            android:label="@string/title_activity_runs"
+            android:parentActivityName=".MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.dingtao.run.MainActivity" />
+        </activity>
     </application>
 
 </manifest>
