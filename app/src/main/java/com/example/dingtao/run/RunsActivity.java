@@ -74,7 +74,7 @@ public class RunsActivity extends ActionBarActivity {
             TextView time = (TextView) rowView.findViewById(R.id.time);
 
             name.setText(run.name);
-            time.setText(String.valueOf(run.begin));
+            time.setText(run.StartedToTime());
             return rowView;
         }
     }

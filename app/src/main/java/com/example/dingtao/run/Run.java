@@ -10,7 +10,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -88,6 +91,28 @@ public class Run {
         for (int i = 0; i < jsonArray.length(); i++) {
             tracks.add(new LocationJSON(jsonArray.getJSONObject(i)));
         }
+    }
+
+    public String DistanceToKm(){
+        return String.format("%1$,.2f",(distance / 1000)) + "km";
+    }
+
+    public String DurationToTime(){
+        long second = (duration / 1000) % 60;
+        long minute = (duration / (1000 * 60)) % 60;
+        long hour = (duration / (1000 * 60 * 60)) % 24;
+        return String.format("%02d:%02d:%02d", hour, minute, second);
+
+    }
+
+    public String StartedToTime(){
+        Date date = new Date(begin);
+        DateFormat formatter = new SimpleDateFormat("yy-MM-dd HH:mm:ss");
+        return formatter.format(date);
+    }
+
+    public String SpeedToKmPH(){
+        return String.format("%1$,.2f",averageSpeed/1000*360) + "km/h";
     }
 
 }

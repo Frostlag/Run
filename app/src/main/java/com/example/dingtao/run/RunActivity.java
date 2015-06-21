@@ -8,10 +8,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.PolylineOptions;
+
+import java.util.List;
 
 
 public class RunActivity extends ActionBarActivity {
@@ -32,17 +37,30 @@ public class RunActivity extends ActionBarActivity {
         TextView duration = (TextView) findViewById(R.id.duration);
         TextView averageSpeed = (TextView) findViewById(R.id.average_speed);
         name.setText(run.name);
-        begin.setText("Started: " + run.begin);
-        distance.setText("Distance:" + run.distance);
-        duration.setText("Duration:" + run.duration);
-        averageSpeed.setText("Speed:" + run.averageSpeed);
-        GoogleMap map = ((MapFragment) getFragmentManager().findFragmentById(R.id.Map)).getMap();
+        begin.setText("Started: " + run.StartedToTime());
+        distance.setText("Distance:" + run.DistanceToKm());
+        duration.setText("Duration:" + run.DurationToTime());
+        averageSpeed.setText("Speed:" + run.SpeedToKmPH());
+
+        final GoogleMap map = ((MapFragment) getFragmentManager().findFragmentById(R.id.Map)).getMap();
 
         PolylineOptions options = new PolylineOptions().width(5).color(Color.BLUE).geodesic(true);
         for (LocationJSON locationJSON : run.tracks){
             options.add(new LatLng(locationJSON.latitude,locationJSON.longitude));
         }
-        map.addPolyline(options);
+        List<LatLng> points = map.addPolyline(options).getPoints();
+        final LatLngBounds.Builder builder = new LatLngBounds.Builder();
+
+        for (LatLng latLng : points){
+            builder.include(latLng);
+        }
+        map.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
+            @Override
+            public void onMapLoaded() {
+                map.moveCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), 50));
+            }
+        });
+
         Log.i("TEST",run.name);
     }
 
