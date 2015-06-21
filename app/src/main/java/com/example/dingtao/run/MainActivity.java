@@ -118,6 +118,11 @@ public class MainActivity extends ActionBarActivity implements UpdateableView {
         startActivity(intent);
     }
 
+    public void Runs(MenuItem item){
+        Intent intent = new Intent(this,RunsActivity.class);
+        startActivity(intent);
+    }
+
     public void Save(View view){
         model.Save();
     }

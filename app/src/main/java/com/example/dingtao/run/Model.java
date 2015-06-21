@@ -18,6 +18,16 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.sql.Driver;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +40,7 @@ public class Model implements GoogleApiClient.ConnectionCallbacks, GoogleApiClie
     public boolean started,paused;
     public static int min_time,max_time;
     public Run run;
+    public List<Run> runs;
 
     private GoogleApiClient mGoogleApiClient;
 
@@ -39,6 +50,7 @@ public class Model implements GoogleApiClient.ConnectionCallbacks, GoogleApiClie
     private Boolean connected = false;
     private Context main;
     private List<UpdateableView> views;
+    private String saveFile = "save.txt";
 
     public static Model Model(Context context){
         if (init) {
@@ -54,14 +66,21 @@ public class Model implements GoogleApiClient.ConnectionCallbacks, GoogleApiClie
         main = context;
         SP = PreferenceManager.getDefaultSharedPreferences(context);
         views = new ArrayList<UpdateableView>();
+        runs = new ArrayList<Run>();
         Log.d("Test","Connecting");
+        LoadFromFile();
         mGoogleApiClient = new GoogleApiClient.Builder(main).addApi(LocationServices.API).addConnectionCallbacks(this).addOnConnectionFailedListener(this).build();
         mGoogleApiClient.connect();
     }
 
     public void ReloadPreferences(){
         min_time = Integer.valueOf(SP.getString("min_time", "3000"));
-        max_time = Integer.valueOf(SP.getString("max_time","30000"));
+        max_time = Integer.valueOf(SP.getString("max_time", "30000"));
+        if (started){
+            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient,this);
+            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient,createLocationRequest(),this);
+        }
+
     }
 
     public static Model Get(){
@@ -99,8 +118,54 @@ public class Model implements GoogleApiClient.ConnectionCallbacks, GoogleApiClie
 
     public void Save(){
         if (started) return;
-        if (run.tracks.isEmpty()) return;
+        if (run == null || run.tracks.isEmpty()){
+            DialogManager.NoInput(main);
+            return;
+        }
         DialogManager.NameRun(main,run);
+    }
+
+    public void WriteToFile(){
+        JSONArray obj = new JSONArray();
+        try {
+            for (Run run : runs) {
+                obj.put(run.ToJSONObject());
+            }
+        }catch (JSONException exception){}
+
+        FileOutputStream os;
+        try {
+            os = main.openFileOutput(saveFile, Context.MODE_PRIVATE);
+            os.write(obj.toString().getBytes());
+        }catch(FileNotFoundException e){
+        }catch(IOException e){}
+    }
+
+    public void LoadFromFile(){
+        try {
+            FileInputStream fis = main.openFileInput(saveFile);
+            InputStreamReader isr = new InputStreamReader(fis);
+            BufferedReader br = new BufferedReader(isr);
+            StringBuilder sb = new StringBuilder();
+            String line;
+            while ((line = br.readLine()) != null) {
+                sb.append(line);
+            }
+            isr.close();
+
+            JSONArray jsonRuns = new JSONArray(sb.toString());
+            for (int i = 0; i< jsonRuns.length(); i++){
+                JSONObject jsonRun = jsonRuns.getJSONObject(i);
+                Run run = new Run(jsonRun);
+
+                runs.add(run);
+            }
+        } catch (FileNotFoundException e) {
+        } catch (IOException e) {
+        } catch (JSONException e){
+            //Log.e("test","exception",e);
+            runs.clear();
+        }
     }
 
     public void Pause(){
