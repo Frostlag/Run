@@ -6,7 +6,7 @@
         android:numeric="integer"/>
     <EditTextPreference
         android:title="@string/max_time"
-        android:key="min_time"
+        android:key="max_time"
         android:summary="@string/max_time_summary"
         android:numeric="integer"/>
 </PreferenceScreen>

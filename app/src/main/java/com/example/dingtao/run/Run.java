@@ -38,6 +38,7 @@ public class Run {
         tracks.add(locationJSON);
         distance += location.distanceTo(lastLocation.ToLocation());
         duration = tracks.get(tracks.size()-1).time - tracks.get(0).time;
+        averageSpeed = distance / (duration / 1000);
     }
 
     public boolean AddLocation(Location location){
@@ -48,6 +49,7 @@ public class Run {
             tracks.add(locationJSON);
             distance += location.distanceTo(lastLocation.ToLocation());
             duration = tracks.get(tracks.size()-1).time - tracks.get(0).time;
+            averageSpeed = distance / (duration / 1000);
             Log.i("OLD LOCATION", lastLocation.toString());
             Log.i("NEW LOCATION", location.toString());
             return true;
@@ -112,7 +114,7 @@ public class Run {
     }
 
     public String SpeedToKmPH(){
-        return String.format("%1$,.2f",averageSpeed/1000*360) + "km/h";
+        return String.format("%1$,.2f",averageSpeed/1000*3600) + "km/h";
     }
 
 }
