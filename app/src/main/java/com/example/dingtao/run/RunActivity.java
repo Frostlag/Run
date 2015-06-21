@@ -61,7 +61,6 @@ public class RunActivity extends ActionBarActivity {
             }
         });
 
-        Log.i("TEST",run.name);
     }
 
     @Override

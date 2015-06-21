@@ -10,12 +10,14 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.wifi.p2p.WifiP2pManager;
+import android.os.SystemClock;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Chronometer;
 import android.widget.TextView;
 
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -32,11 +34,11 @@ import com.google.android.gms.maps.model.PolylineOptions;
 
 public class MainActivity extends ActionBarActivity implements UpdateableView {
     Button startButton,pauseButton,saveButton;
-    TextView speed,time,distance;
+    TextView speed,distance;
     Model model;
     GoogleMap map;
     Polyline line;
-
+    Chronometer time;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +49,6 @@ public class MainActivity extends ActionBarActivity implements UpdateableView {
         startButton = (Button) findViewById(R.id.Start);
         saveButton = (Button) findViewById(R.id.Save);
         speed = (TextView) findViewById(R.id.speed);
-        time = (TextView) findViewById(R.id.time);
         distance = (TextView) findViewById(R.id.distance);
 
         //TODO:pauseButton = (Button) findViewById(R.id.Pause);
@@ -55,6 +56,10 @@ public class MainActivity extends ActionBarActivity implements UpdateableView {
         map = ((MapFragment) getFragmentManager().findFragmentById(R.id.Map)).getMap();
 
         map.setMyLocationEnabled(true);
+
+        time = (Chronometer) findViewById(R.id.time);
+
+
     }
 
     @Override
@@ -96,9 +101,12 @@ public class MainActivity extends ActionBarActivity implements UpdateableView {
         model.Start();
         if (model.started) {
             startButton.setText(R.string.Stop);
+            time.setBase(SystemClock.elapsedRealtime());
+            time.start();
         }
         else {
             startButton.setText(R.string.Start);
+            time.stop();
             //TODO:pauseButton.setText(R.string.Pause);
         }
     }
