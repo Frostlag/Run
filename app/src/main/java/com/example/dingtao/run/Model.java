@@ -80,7 +80,6 @@ public class Model implements GoogleApiClient.ConnectionCallbacks, GoogleApiClie
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient,this);
             LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient,createLocationRequest(),this);
         }
-
     }
 
     public static Model Get(){

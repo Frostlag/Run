@@ -61,6 +61,7 @@ public class MainActivity extends ActionBarActivity implements UpdateableView {
     protected void onStart(){
         super.onStart();
         model.AddView(this);
+        Update(Model.TRACK_UPDATED);
     }
 
     @Override
@@ -142,10 +143,7 @@ public class MainActivity extends ActionBarActivity implements UpdateableView {
             speed.setText("Speed: " + String.format("%1$,.2f",model.run.tracks.get(model.run.tracks.size() - 1).speed));
             distance.setText("Distance: " + String.format("%1$,.2f",model.run.distance));
         }
-
     }
-
-
 
 }
 
