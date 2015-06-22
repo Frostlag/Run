@@ -15,6 +15,8 @@ import com.google.android.gms.drive.Drive;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -48,11 +50,11 @@ public class Model implements GoogleApiClient.ConnectionCallbacks, GoogleApiClie
     private static Model instance;
     private static Boolean init = false;
     private Boolean connected = false;
-    private Context main;
+    private MainActivity main;
     private List<UpdateableView> views;
     private String saveFile = "save.txt";
 
-    public static Model Model(Context context){
+    public static Model Model(MainActivity context){
         if (init) {
             return instance;
         }
@@ -62,7 +64,7 @@ public class Model implements GoogleApiClient.ConnectionCallbacks, GoogleApiClie
         return instance;
     }
 
-    private Model(Context context){
+    private Model(MainActivity context){
         main = context;
         SP = PreferenceManager.getDefaultSharedPreferences(context);
         views = new ArrayList<UpdateableView>();
@@ -95,6 +97,7 @@ public class Model implements GoogleApiClient.ConnectionCallbacks, GoogleApiClie
             started = false;
             paused = false;
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient,this);
+            main.Update(TRACK_UPDATED);
         }else{
             if (!connected){
                 mGoogleApiClient.connect();
@@ -104,6 +107,7 @@ public class Model implements GoogleApiClient.ConnectionCallbacks, GoogleApiClie
             LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient,createLocationRequest(),this);
             Location lastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
             run = new Run(lastLocation);
+            main.Update(TRACK_UPDATED);
         }
     }
 
@@ -201,7 +205,8 @@ public class Model implements GoogleApiClient.ConnectionCallbacks, GoogleApiClie
     @Override
     public void onConnected(Bundle bundle) {
         connected = true;
-
+        Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+        main.MoveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(),location.getLongitude()),15));
     }
 
     @Override

@@ -117,4 +117,8 @@ public class Run {
         return String.format("%1$,.2f",averageSpeed/1000*3600) + "km/h";
     }
 
+    public String CurrentSpeedToKmPH(){
+        return String.format("%1$,.2f",tracks.get(tracks.size()-1).speed /1000*3600) + "km/h";
+    }
+
 }

@@ -34,7 +34,7 @@ import com.google.android.gms.maps.model.PolylineOptions;
 
 public class MainActivity extends ActionBarActivity implements UpdateableView {
     Button startButton,pauseButton,saveButton;
-    TextView speed,distance;
+    TextView speed,distance,averageSpeed;
     Model model;
     GoogleMap map;
     Polyline line;
@@ -50,6 +50,8 @@ public class MainActivity extends ActionBarActivity implements UpdateableView {
         saveButton = (Button) findViewById(R.id.Save);
         speed = (TextView) findViewById(R.id.speed);
         distance = (TextView) findViewById(R.id.distance);
+        averageSpeed = (TextView) findViewById(R.id.average_speed);
+
 
         //TODO:pauseButton = (Button) findViewById(R.id.Pause);
 
@@ -149,9 +151,13 @@ public class MainActivity extends ActionBarActivity implements UpdateableView {
             line = map.addPolyline(options);
 
             speed.setText("Speed: " + String.format("%1$,.2f",model.run.tracks.get(model.run.tracks.size() - 1).speed));
-            distance.setText("Distance: " + String.format("%1$,.2f",model.run.distance));
+            distance.setText("Distance: " + model.run.DistanceToKm());
+            averageSpeed.setText("Average Speed: " + model.run.SpeedToKmPH());
         }
     }
 
+    public void MoveCamera(CameraUpdate cameraUpdate){
+        map.moveCamera(cameraUpdate);
+    }
 }
 
