@@ -27,11 +27,6 @@ public class Run {
     public long duration;
     public long begin;
 
-
-    public void Calc(){
-
-    }
-
     public void ForceAddLocation(Location location){
         LocationJSON locationJSON = new LocationJSON(location);
         LocationJSON lastLocation = tracks.get(tracks.size()-1);
@@ -117,8 +112,15 @@ public class Run {
         return String.format("%1$,.2f",averageSpeed/1000*3600) + "km/h";
     }
 
-    public String CurrentSpeedToKmPH(){
-        return String.format("%1$,.2f",tracks.get(tracks.size()-1).speed /1000*3600) + "km/h";
+    public String CurrentSpeedToKmPH(){ return String.format("%1$,.2f",tracks.get(tracks.size()-1).speed /1000*3600) + "km/h"; }
+
+    public double MaxKmPH(){
+        double max = 0;
+        for (LocationJSON locationJSON : tracks){
+            if (locationJSON.speed > max) max = locationJSON.speed;
+        }
+        return max*3.6;
     }
+
 
 }

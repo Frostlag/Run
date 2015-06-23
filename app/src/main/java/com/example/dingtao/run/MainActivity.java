@@ -150,7 +150,7 @@ public class MainActivity extends ActionBarActivity implements UpdateableView {
             }
             line = map.addPolyline(options);
 
-            speed.setText("Speed: " + String.format("%1$,.2f",model.run.tracks.get(model.run.tracks.size() - 1).speed));
+            speed.setText("Speed: " + model.run.CurrentSpeedToKmPH());
             distance.setText("Distance: " + model.run.DistanceToKm());
             averageSpeed.setText("Average Speed: " + model.run.SpeedToKmPH());
         }

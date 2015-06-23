@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import com.github.mikephil.charting.charts.LineChart;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -36,11 +37,14 @@ public class RunActivity extends ActionBarActivity {
         TextView distance = (TextView) findViewById(R.id.distance);
         TextView duration = (TextView) findViewById(R.id.duration);
         TextView averageSpeed = (TextView) findViewById(R.id.average_speed);
+        LineChart speedChart = (LineChart) findViewById(R.id.speed_chart);
         name.setText(run.name);
         begin.setText("Started: " + run.StartedToTime());
         distance.setText("Distance:" + run.DistanceToKm());
         duration.setText("Duration:" + run.DurationToTime());
         averageSpeed.setText("Speed:" + run.SpeedToKmPH());
+
+
 
         final GoogleMap map = ((MapFragment) getFragmentManager().findFragmentById(R.id.Map)).getMap();
 

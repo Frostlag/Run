@@ -46,4 +46,10 @@
         android:layout_width="match_parent"
         android:layout_height="350dp"
         class="com.google.android.gms.maps.MapFragment" />
+
+    <com.github.mikephil.charting.charts.LineChart
+        android:layout_marginTop="5dp"
+        android:id="@+id/speed_chart"
+        android:layout_width="match_parent"
+        android:layout_height="350dp" />
 </LinearLayout>
