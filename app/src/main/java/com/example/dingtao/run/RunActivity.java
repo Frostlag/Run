@@ -48,6 +48,14 @@ public class RunActivity extends ActionBarActivity {
 
         YAxis yAxis = speedChart.getAxisLeft();
         XAxis xAxis = speedChart.getXAxis();
+        yAxis.setEnabled(true);
+        xAxis.setEnabled(true);
+        yAxis.setDrawAxisLine(true);
+        xAxis.setDrawAxisLine(true);
+        yAxis.setDrawLabels(true);
+        xAxis.setDrawLabels(true);
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+
 
 
 
