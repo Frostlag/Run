@@ -9,6 +9,8 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -43,6 +45,17 @@ public class RunActivity extends ActionBarActivity {
         distance.setText("Distance:" + run.DistanceToKm());
         duration.setText("Duration:" + run.DurationToTime());
         averageSpeed.setText("Speed:" + run.SpeedToKmPH());
+
+        YAxis yAxis = speedChart.getAxisLeft();
+        XAxis xAxis = speedChart.getXAxis();
+        yAxis.setEnabled(true);
+        xAxis.setEnabled(true);
+        yAxis.setDrawAxisLine(true);
+        xAxis.setDrawAxisLine(true);
+        yAxis.setDrawLabels(true);
+        xAxis.setDrawLabels(true);
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+
 
 
 

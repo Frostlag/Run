@@ -224,7 +224,7 @@ public class Model implements GoogleApiClient.ConnectionCallbacks, GoogleApiClie
     protected LocationRequest createLocationRequest(){
         LocationRequest locationRequest = new LocationRequest();
         locationRequest.setInterval(min_time);
-        locationRequest.setFastestInterval(min_time);
+        locationRequest.setFastestInterval(0);
         locationRequest.setMaxWaitTime(max_time);
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         return locationRequest;
