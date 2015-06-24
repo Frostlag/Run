@@ -23,7 +23,7 @@ public class Run {
     public List<LocationJSON> tracks;
     public String name;
     public double distance;
-    public double averageSpeed;
+    public double averageSpeed,topSpeed;
     public long duration;
     public long begin;
 
@@ -45,8 +45,8 @@ public class Run {
             distance += location.distanceTo(lastLocation.ToLocation());
             duration = tracks.get(tracks.size()-1).time - tracks.get(0).time;
             averageSpeed = distance / (duration / 1000);
-            Log.i("OLD LOCATION", lastLocation.toString());
-            Log.i("NEW LOCATION", location.toString());
+            //Log.i("OLD LOCATION", String.valueOf(lastLocation.accuracy));
+            //Log.i("NEW LOCATION", String.valueOf(locationJSON.accuracy));
             return true;
         }
     }

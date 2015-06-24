@@ -26,6 +26,7 @@ import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
@@ -39,6 +40,8 @@ public class MainActivity extends ActionBarActivity implements UpdateableView {
     GoogleMap map;
     Polyline line;
     Chronometer time;
+    CameraPosition lastCameraPosition;
+    Long timebase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,13 +71,26 @@ public class MainActivity extends ActionBarActivity implements UpdateableView {
     protected void onStart(){
         super.onStart();
         model.AddView(this);
-        if (model.started) Update(Model.TRACK_UPDATED);
+        if (model.started) {
+            Update(Model.TRACK_UPDATED);
+            startButton.setText(R.string.Stop);
+        }
+
+        if (lastCameraPosition != null){
+            map.moveCamera(CameraUpdateFactory.newCameraPosition(lastCameraPosition));
+        }
+        if (timebase != null){
+            time.setBase(timebase);
+        }
+
     }
 
     @Override
     protected void onStop(){
         super.onStop();
         model.RemoveView(this);
+        lastCameraPosition = map.getCameraPosition();
+        timebase = time.getBase();
     }
 
     @Override
@@ -109,6 +125,7 @@ public class MainActivity extends ActionBarActivity implements UpdateableView {
         else {
             startButton.setText(R.string.Start);
             time.stop();
+            timebase = null;
             //TODO:pauseButton.setText(R.string.Pause);
         }
     }

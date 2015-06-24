@@ -76,7 +76,7 @@ public class Model implements GoogleApiClient.ConnectionCallbacks, GoogleApiClie
 
     public void ReloadPreferences(){
         min_time = Integer.valueOf(SP.getString("min_time", "3000"));
-        max_time = Integer.valueOf(SP.getString("max_time", "30000"));
+        max_time = Integer.valueOf(SP.getString("max_time", "45000"));
         if (started){
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient,this);
             LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient,createLocationRequest(),this);
@@ -184,7 +184,9 @@ public class Model implements GoogleApiClient.ConnectionCallbacks, GoogleApiClie
         }
     }
 
-
+    public boolean IsConnected(){
+        return connected;
+    }
 
     public void AddView(UpdateableView view){
         if (views.contains(view)) return;
@@ -234,4 +236,5 @@ public class Model implements GoogleApiClient.ConnectionCallbacks, GoogleApiClie
         //Log.i("Location Changed", location.toString());
         AddLocation(location);
     }
+
 }

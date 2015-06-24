@@ -1,6 +1,7 @@
 package com.example.dingtao.run;
 
 import android.location.Location;
+import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -73,38 +74,30 @@ public class LocationJSON {
         // Check whether the new location fix is newer or older
         long timeDelta = location.time - time;
         boolean isSignificantlyNewer = timeDelta > Model.max_time;
-        boolean isSignificantlyOlder = timeDelta < -Model.max_time;
         boolean isNewer = timeDelta > 0;
+        //
 
         if (isSignificantlyNewer) {
+            //Log.i("Location Changed", "isSignificantlyNewer");
             return true;
-        } else if (isSignificantlyOlder) {
-            return false;
         }
 
         // Check whether the new location fix is more or less accurate
-        int accuracyDelta = (int) (location.accuracy - accuracy);
+        int accuracyDelta = (int) (accuracy-location.accuracy);
+
         boolean isLessAccurate = accuracyDelta > 0;
         boolean isMoreAccurate = accuracyDelta < 0;
-        boolean isSignificantlyLessAccurate = accuracyDelta > 200;
-
-        // Check if the old and new location are from the same provider
-        boolean isFromSameProvider = IsSameProvider(location);
+        //Log.i("Accuracy Delta", String.valueOf(accuracyDelta));
 
         // Determine location quality using a combination of timeliness and accuracy
         if (isMoreAccurate) {
+            //Log.i("Location Changed", "isMoreAccuate");
             return true;
         } else if (isNewer && !isLessAccurate) {
-            return true;
-        } else if (isNewer && !isSignificantlyLessAccurate && isFromSameProvider) {
+            //Log.i("Location Changed", "isNewer && !isLessAccurate");
             return true;
         }
         return false;
-    }
-
-    /** Checks whether two providers are the same */
-    private boolean IsSameProvider(LocationJSON location) {
-        return provider.equals(location.provider);
     }
 
 }
