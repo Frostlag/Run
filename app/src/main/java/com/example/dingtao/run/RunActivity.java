@@ -22,9 +22,8 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import java.util.List;
 
 
-public class RunActivity extends ActionBarActivity {
+public class RunActivity extends ActionBarActivity  {
     int rid;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,13 +76,18 @@ public class RunActivity extends ActionBarActivity {
                 map.moveCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), 50));
             }
         });
+    }
 
+    public void Delete(MenuItem item){
+        Model.Get().RemoveRun(rid);
+        finish();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_run, menu);
+
         return true;
     }
 
@@ -101,4 +105,6 @@ public class RunActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+
 }

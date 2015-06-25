@@ -55,7 +55,6 @@ public class MainActivity extends ActionBarActivity implements UpdateableView {
         distance = (TextView) findViewById(R.id.distance);
         averageSpeed = (TextView) findViewById(R.id.average_speed);
 
-
         //TODO:pauseButton = (Button) findViewById(R.id.Pause);
 
         map = ((MapFragment) getFragmentManager().findFragmentById(R.id.Map)).getMap();
@@ -64,6 +63,9 @@ public class MainActivity extends ActionBarActivity implements UpdateableView {
 
         time = (Chronometer) findViewById(R.id.time);
 
+        if(!(Thread.getDefaultUncaughtExceptionHandler() instanceof CustomExceptionHandler)) {
+            Thread.setDefaultUncaughtExceptionHandler(new CustomExceptionHandler(this));
+        }
 
     }
 
@@ -75,14 +77,17 @@ public class MainActivity extends ActionBarActivity implements UpdateableView {
             Update(Model.TRACK_UPDATED);
             startButton.setText(R.string.Stop);
         }
-
         if (lastCameraPosition != null){
             map.moveCamera(CameraUpdateFactory.newCameraPosition(lastCameraPosition));
         }
         if (timebase != null){
             time.setBase(timebase);
         }
+    }
 
+    @Override
+    protected void onPause(){
+        super.onPause();
     }
 
     @Override

@@ -48,6 +48,18 @@ public class DialogManager {
         builder.show();
     }
 
+    public static void ClearLists(Context context){
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setMessage(R.string.clear_runs_title).setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Model.Get().ClearRuns();
+            }
+        }).setNegativeButton(R.string.cancel,null);
+        final AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
     public static void NoInput(Context context){
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle(R.string.no_input_title).setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {

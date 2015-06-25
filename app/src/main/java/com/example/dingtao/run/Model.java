@@ -30,6 +30,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.sql.Driver;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +40,7 @@ import java.util.List;
  */
 public class Model implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,LocationListener{
     public static String TRACK_UPDATED = "TRACK UPDATED";
+    public static String RUNS_UPDATED = "RUNS UPDATED";
     public boolean started,paused;
     public static int min_time,max_time;
     public Run run;
@@ -125,6 +127,13 @@ public class Model implements GoogleApiClient.ConnectionCallbacks, GoogleApiClie
             return;
         }
         DialogManager.NameRun(main, run);
+    }
+
+    public void RemoveRun(int rid){
+        runs.remove(rid);
+        Update(RUNS_UPDATED);
+        WriteToFile();
+
     }
 
     public void WriteToFile(){
@@ -235,6 +244,15 @@ public class Model implements GoogleApiClient.ConnectionCallbacks, GoogleApiClie
     public void onLocationChanged(Location location) {
         //Log.i("Location Changed", location.toString());
         AddLocation(location);
+    }
+
+    public void ClearRuns(){
+        runs.clear();
+        try {
+            OutputStream os = main.openFileOutput(saveFile, Context.MODE_PRIVATE);
+            os.write("".getBytes());
+        }catch(FileNotFoundException e){
+        }catch(IOException e){}
     }
 
 }

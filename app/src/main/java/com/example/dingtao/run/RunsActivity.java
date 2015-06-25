@@ -20,15 +20,17 @@ import java.lang.reflect.Array;
 import java.util.List;
 
 
-public class RunsActivity extends ActionBarActivity {
+public class RunsActivity extends ActionBarActivity implements UpdateableView {
     Model model;
+    RunAdapter adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_runs);
         model = Model.Get();
         ListView listView = (ListView) findViewById(R.id.list);
-        listView.setAdapter(new RunAdapter(this,R.layout.list_item_run,model.runs));
+        adapter = new RunAdapter(this,R.layout.list_item_run,model.runs);
+        listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -36,6 +38,12 @@ public class RunsActivity extends ActionBarActivity {
                 view.getContext().startActivity(intent);
             }
         });
+    }
+
+    @Override
+    public void onStart(){
+        super.onStart();
+        adapter.notifyDataSetChanged();
     }
 
     @Override
@@ -76,6 +84,13 @@ public class RunsActivity extends ActionBarActivity {
             name.setText(run.name);
             time.setText(run.StartedToTime());
             return rowView;
+        }
+    }
+
+    @Override
+    public void Update(String msg) {
+        if (msg == Model.RUNS_UPDATED){
+            adapter.notifyDataSetChanged();
         }
     }
 }

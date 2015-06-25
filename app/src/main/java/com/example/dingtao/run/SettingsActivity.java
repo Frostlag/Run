@@ -58,6 +58,14 @@ public class SettingsActivity extends PreferenceActivity {
         {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.preferences);
+            Preference button = (Preference) findPreference(getString(R.string.clear_runs_button));
+            button.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    DialogManager.ClearLists(getActivity());
+                    return true;
+                }
+            });
         }
 
         @Override
