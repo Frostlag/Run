@@ -56,7 +56,8 @@ public class MainActivity extends ActionBarActivity implements UpdateableView {
         averageSpeed = (TextView) findViewById(R.id.average_speed);
 
         //TODO:pauseButton = (Button) findViewById(R.id.Pause);
-
+        MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.Map);
+        mapFragment.setRetainInstance(true);
         map = ((MapFragment) getFragmentManager().findFragmentById(R.id.Map)).getMap();
 
         map.setMyLocationEnabled(true);
@@ -76,12 +77,6 @@ public class MainActivity extends ActionBarActivity implements UpdateableView {
         if (model.started) {
             Update(Model.TRACK_UPDATED);
             startButton.setText(R.string.Stop);
-        }
-        if (lastCameraPosition != null){
-            map.moveCamera(CameraUpdateFactory.newCameraPosition(lastCameraPosition));
-        }
-        if (timebase != null){
-            time.setBase(timebase);
         }
     }
 
