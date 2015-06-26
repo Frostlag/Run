@@ -11,6 +11,8 @@ import android.widget.TextView;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -19,6 +21,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.PolylineOptions;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -54,6 +57,11 @@ public class RunActivity extends ActionBarActivity  {
         yAxis.setDrawLabels(true);
         xAxis.setDrawLabels(true);
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+
+        ArrayList<LineDataSet> dataSets = new ArrayList<LineDataSet>();
+        ArrayList<String> xVals = new ArrayList<String>();
+        LineData data = new LineData();
+        speedChart.setData(data);
 
 
         final GoogleMap map = ((MapFragment) getFragmentManager().findFragmentById(R.id.Map)).getMap();
