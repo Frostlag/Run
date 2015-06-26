@@ -56,8 +56,6 @@ public class RunActivity extends ActionBarActivity  {
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
 
 
-
-
         final GoogleMap map = ((MapFragment) getFragmentManager().findFragmentById(R.id.Map)).getMap();
 
         PolylineOptions options = new PolylineOptions().width(5).color(Color.BLUE).geodesic(true);
@@ -76,6 +74,11 @@ public class RunActivity extends ActionBarActivity  {
                 map.moveCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), 50));
             }
         });
+    }
+
+    @Override
+    public void onPause(){
+        super.onPause();
     }
 
     public void Delete(MenuItem item){

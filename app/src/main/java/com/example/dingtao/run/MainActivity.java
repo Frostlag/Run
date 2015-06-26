@@ -42,6 +42,7 @@ public class MainActivity extends ActionBarActivity implements UpdateableView {
     Chronometer time;
     CameraPosition lastCameraPosition;
     Long timebase;
+    MapFragment mapFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,11 +57,11 @@ public class MainActivity extends ActionBarActivity implements UpdateableView {
         averageSpeed = (TextView) findViewById(R.id.average_speed);
 
         //TODO:pauseButton = (Button) findViewById(R.id.Pause);
-        MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.Map);
-        mapFragment.setRetainInstance(true);
-        map = ((MapFragment) getFragmentManager().findFragmentById(R.id.Map)).getMap();
+        mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.Map);
 
-        map.setMyLocationEnabled(true);
+        map = mapFragment.getMap();
+        if (!map.isMyLocationEnabled())
+            map.setMyLocationEnabled(true);
 
         time = (Chronometer) findViewById(R.id.time);
 
@@ -89,6 +90,7 @@ public class MainActivity extends ActionBarActivity implements UpdateableView {
     protected void onStop(){
         super.onStop();
         model.RemoveView(this);
+        mapFragment.setRetainInstance(true);
         lastCameraPosition = map.getCameraPosition();
         timebase = time.getBase();
     }
