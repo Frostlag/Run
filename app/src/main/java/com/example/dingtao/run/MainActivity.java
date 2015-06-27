@@ -60,10 +60,12 @@ public class MainActivity extends ActionBarActivity implements UpdateableView {
         mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.Map);
 
         map = mapFragment.getMap();
-        if (!map.isMyLocationEnabled())
-            map.setMyLocationEnabled(true);
+        map.setMyLocationEnabled(true);
 
         time = (Chronometer) findViewById(R.id.time);
+        if (savedInstanceState != null){
+            time.setBase(savedInstanceState.getLong("timeBase"));
+        }
 
         if(!(Thread.getDefaultUncaughtExceptionHandler() instanceof CustomExceptionHandler)) {
             Thread.setDefaultUncaughtExceptionHandler(new CustomExceptionHandler(this));
@@ -82,17 +84,18 @@ public class MainActivity extends ActionBarActivity implements UpdateableView {
     }
 
     @Override
-    protected void onPause(){
-        super.onPause();
-    }
-
-    @Override
     protected void onStop(){
         super.onStop();
         model.RemoveView(this);
         mapFragment.setRetainInstance(true);
         lastCameraPosition = map.getCameraPosition();
-        timebase = time.getBase();
+
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle bundle){
+        bundle.putLong("timeBase",time.getBase());
+        super.onSaveInstanceState(bundle);
     }
 
     @Override

@@ -6,11 +6,13 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.google.android.gms.maps.CameraUpdate;
@@ -21,7 +23,10 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.PolylineOptions;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -60,9 +65,25 @@ public class RunActivity extends ActionBarActivity  {
 
         ArrayList<LineDataSet> dataSets = new ArrayList<LineDataSet>();
         ArrayList<String> xVals = new ArrayList<String>();
-        LineData data = new LineData();
-        speedChart.setData(data);
+        ArrayList<Entry> vals = new ArrayList<Entry>();
 
+        for (LocationJSON locationJSON : run.tracks){
+            long durationtime = locationJSON.time - run.begin;
+            long second = (durationtime / 1000) % 60;
+            long minute = (durationtime / (1000 * 60)) % 60;
+            long hour = (durationtime / (1000 * 60 * 60)) % 24;
+            xVals.add(String.format("%02d:%02d:%02d", hour, minute, second));
+
+            Entry entry = new Entry((float)locationJSON.speed,(int)durationtime);
+            vals.add(entry);
+            Log.i("Entry",entry.toString());
+        }
+
+        LineDataSet speedDataSet = new LineDataSet(vals,"Speed");
+        speedDataSet.setAxisDependency(YAxis.AxisDependency.LEFT);
+        dataSets.add(speedDataSet);
+        LineData data = new LineData(xVals,dataSets);
+        speedChart.setData(data);
 
         final GoogleMap map = ((MapFragment) getFragmentManager().findFragmentById(R.id.Map)).getMap();
 

@@ -102,7 +102,6 @@ public class Run {
         long minute = (duration / (1000 * 60)) % 60;
         long hour = (duration / (1000 * 60 * 60)) % 24;
         return String.format("%02d:%02d:%02d", hour, minute, second);
-
     }
 
     public String StartedToTime(){
@@ -116,14 +115,5 @@ public class Run {
     }
 
     public String CurrentSpeedToKmPH(){ return String.format("%1$,.2f",tracks.get(tracks.size()-1).speed /1000*3600) + "km/h"; }
-
-    public double MaxKmPH(){
-        double max = 0;
-        for (LocationJSON locationJSON : tracks){
-            if (locationJSON.speed > max) max = locationJSON.speed;
-        }
-        return max*3.6;
-    }
-
 
 }
