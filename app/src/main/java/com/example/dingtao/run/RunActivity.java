@@ -81,9 +81,12 @@ public class RunActivity extends ActionBarActivity  {
 
         LineDataSet speedDataSet = new LineDataSet(vals,"Speed");
         speedDataSet.setAxisDependency(YAxis.AxisDependency.LEFT);
+        speedDataSet.setLineWidth(2);
+        speedDataSet.setColor(Color.BLACK);
         dataSets.add(speedDataSet);
         LineData data = new LineData(xVals,dataSets);
         speedChart.setData(data);
+
 
         final GoogleMap map = ((MapFragment) getFragmentManager().findFragmentById(R.id.Map)).getMap();
 

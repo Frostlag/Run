@@ -13,12 +13,14 @@ import android.net.wifi.p2p.WifiP2pManager;
 import android.os.SystemClock;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
@@ -31,6 +33,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+
+import javax.xml.datatype.Duration;
 
 
 public class MainActivity extends ActionBarActivity implements UpdateableView {
@@ -48,6 +52,14 @@ public class MainActivity extends ActionBarActivity implements UpdateableView {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+        if (!lm.isProviderEnabled(LocationManager.GPS_PROVIDER) && !lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+            Toast.makeText(this,R.string.quit_notice_message, Toast.LENGTH_LONG).show();
+
+            finish();
+            return;
+        }
 
         model = Model.Model(this);
         startButton = (Button) findViewById(R.id.Start);
