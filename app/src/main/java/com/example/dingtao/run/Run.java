@@ -73,7 +73,7 @@ public class Run {
         name = "";
         distance = 0;
         averageSpeed = location.getSpeed();
-        begin = System.currentTimeMillis();
+        begin = location.getTime();
         duration = 0;
         topSpeed = 0;
         tracks = new ArrayList<LocationJSON>();

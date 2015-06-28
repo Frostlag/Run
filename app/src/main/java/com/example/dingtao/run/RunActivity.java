@@ -67,18 +67,27 @@ public class RunActivity extends ActionBarActivity  {
         ArrayList<LineDataSet> dataSets = new ArrayList<LineDataSet>();
         ArrayList<String> xVals = new ArrayList<String>();
         ArrayList<Entry> vals = new ArrayList<Entry>();
+        int i = 0;
+        for (LocationJSON locationJSON : run.tracks){
+            long durationtime = locationJSON.time - run.begin;
+            long second = (durationtime / 1000) % 60;
+            long minute = (durationtime / (1000 * 60)) % 60;
+            long hour = (durationtime / (1000 * 60 * 60)) % 24;
+            xVals.add(String.format("%02d:%02d:%02d", hour, minute, second));
 
-//        for (LocationJSON locationJSON : run.tracks){
-//            long durationtime = locationJSON.time - run.begin;
-//            long second = (durationtime / 1000) % 60;
-//            long minute = (durationtime / (1000 * 60)) % 60;
-//            long hour = (durationtime / (1000 * 60 * 60)) % 24;
-//            xVals.add(String.format("%02d:%02d:%02d", hour, minute, second));
-//
-//            Entry entry = new Entry((float)(locationJSON.speed*3.6),(int)durationtime);
-//            vals.add(entry);
-//            Log.i("Entry",entry.toString());
-//        }
+            Entry entry = new Entry((float)(locationJSON.speed*3.6),(int)durationtime / 1000);
+            //Entry entry = new Entry((float)(locationJSON.speed*3.6),i);
+            vals.add(entry);
+            Log.i("Entry",entry.toString());
+            i++;
+        }
+//        Entry e1 = new Entry(50f,0);
+//        Entry e2 = new Entry(25f,1);
+//        vals.add(e1);
+//        vals.add(e2);
+//        xVals.add("TEST1");
+//        xVals.add("TEST2");
+
 
         LineDataSet speedDataSet = new LineDataSet(vals,"Speed");
         speedDataSet.setAxisDependency(YAxis.AxisDependency.LEFT);
@@ -88,6 +97,7 @@ public class RunActivity extends ActionBarActivity  {
         dataSets.add(speedDataSet);
         LineData data = new LineData(xVals,dataSets);
         speedChart.setData(data);
+        speedChart.invalidate();
 
 
         final GoogleMap map = ((MapFragment) getFragmentManager().findFragmentById(R.id.Map)).getMap();
