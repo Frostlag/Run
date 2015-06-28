@@ -62,27 +62,29 @@ public class RunActivity extends ActionBarActivity  {
         yAxis.setDrawLabels(true);
         xAxis.setDrawLabels(true);
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-
+        xAxis.setDrawGridLines(false);
+        yAxis.setDrawGridLines(false);
         ArrayList<LineDataSet> dataSets = new ArrayList<LineDataSet>();
         ArrayList<String> xVals = new ArrayList<String>();
         ArrayList<Entry> vals = new ArrayList<Entry>();
 
-        for (LocationJSON locationJSON : run.tracks){
-            long durationtime = locationJSON.time - run.begin;
-            long second = (durationtime / 1000) % 60;
-            long minute = (durationtime / (1000 * 60)) % 60;
-            long hour = (durationtime / (1000 * 60 * 60)) % 24;
-            xVals.add(String.format("%02d:%02d:%02d", hour, minute, second));
-
-            Entry entry = new Entry((float)locationJSON.speed,(int)durationtime);
-            vals.add(entry);
-            Log.i("Entry",entry.toString());
-        }
+//        for (LocationJSON locationJSON : run.tracks){
+//            long durationtime = locationJSON.time - run.begin;
+//            long second = (durationtime / 1000) % 60;
+//            long minute = (durationtime / (1000 * 60)) % 60;
+//            long hour = (durationtime / (1000 * 60 * 60)) % 24;
+//            xVals.add(String.format("%02d:%02d:%02d", hour, minute, second));
+//
+//            Entry entry = new Entry((float)(locationJSON.speed*3.6),(int)durationtime);
+//            vals.add(entry);
+//            Log.i("Entry",entry.toString());
+//        }
 
         LineDataSet speedDataSet = new LineDataSet(vals,"Speed");
         speedDataSet.setAxisDependency(YAxis.AxisDependency.LEFT);
         speedDataSet.setLineWidth(2);
-        speedDataSet.setColor(Color.BLACK);
+        speedDataSet.setDrawValues(true);
+
         dataSets.add(speedDataSet);
         LineData data = new LineData(xVals,dataSets);
         speedChart.setData(data);

@@ -86,7 +86,7 @@ public class LocationJSON {
         int accuracyDelta = (int) (accuracy-location.accuracy);
 
         boolean isLessAccurate = accuracyDelta > 0;
-        boolean isMoreAccurate = accuracyDelta < 0;
+        boolean isMoreAccurate = accuracyDelta <= 0;
         //Log.i("Accuracy Delta", String.valueOf(accuracyDelta));
 
         // Determine location quality using a combination of timeliness and accuracy
