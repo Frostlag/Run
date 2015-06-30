@@ -58,6 +58,7 @@ public class Model implements GoogleApiClient.ConnectionCallbacks, GoogleApiClie
 
     public static Model Model(MainActivity context){
         if (init) {
+            instance.main = context;
             return instance;
         }
         init = true;

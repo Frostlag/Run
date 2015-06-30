@@ -67,7 +67,7 @@ public class RunActivity extends ActionBarActivity  {
         ArrayList<LineDataSet> dataSets = new ArrayList<LineDataSet>();
         ArrayList<String> xVals = new ArrayList<String>();
         ArrayList<Entry> vals = new ArrayList<Entry>();
-        int i = 0;
+
         for (LocationJSON locationJSON : run.tracks){
             long durationtime = locationJSON.time - run.begin;
             long second = (durationtime / 1000) % 60;
@@ -79,7 +79,6 @@ public class RunActivity extends ActionBarActivity  {
             //Entry entry = new Entry((float)(locationJSON.speed*3.6),i);
             vals.add(entry);
             Log.i("Entry",entry.toString());
-            i++;
         }
 //        Entry e1 = new Entry(50f,0);
 //        Entry e2 = new Entry(25f,1);
