@@ -42,23 +42,23 @@ public class Run {
     public boolean AddLocation(Location location){
         LocationJSON locationJSON = new LocationJSON(location);
         LocationJSON lastLocation = tracks.get(tracks.size()-1);
-        if (!lastLocation.IsBetterLocation(locationJSON)){
-            if (mostAccurateSoFar == null){
-                mostAccurateSoFar = location;
-            }else if (location.getAccuracy() > mostAccurateSoFar.getAccuracy()){
-                mostAccurateSoFar = location;
-            }
-            if (locationJSON.time - lastLocation.time > Model.Get().max_time){
-                ForceAddLocation(mostAccurateSoFar);
-                mostAccurateSoFar = null;
-            }
-            return false;
+        if (mostAccurateSoFar == null || location.getAccuracy() > mostAccurateSoFar.getAccuracy()){
+            mostAccurateSoFar = location;
         }
-        else{
+
+        if (locationJSON.time - lastLocation.time > Model.Get().max_time) {
+            ForceAddLocation(mostAccurateSoFar);
+            mostAccurateSoFar = location;
+            return true;
+        }
+
+        if (!lastLocation.IsBetterLocation(locationJSON)) {
+            return false;
+        } else {
             mostAccurateSoFar = null;
             tracks.add(locationJSON);
             distance += location.distanceTo(lastLocation.ToLocation());
-            duration = tracks.get(tracks.size()-1).time - tracks.get(0).time;
+            duration = tracks.get(tracks.size() - 1).time - tracks.get(0).time;
             averageSpeed = distance / (duration / 1000);
             if (locationJSON.speed > topSpeed) topSpeed = locationJSON.speed;
             //Log.i("OLD LOCATION", String.valueOf(lastLocation.accuracy));
@@ -79,7 +79,7 @@ public class Run {
         for (LocationJSON locationJSON : tracks){
             jsonArray.put(locationJSON.ToJSONObject());
         }
-        jsonObject.put("tracks",jsonArray);
+        jsonObject.put("tracks", jsonArray);
         return jsonObject;
     }
 
