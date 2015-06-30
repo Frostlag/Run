@@ -85,15 +85,18 @@ public class LocationJSON {
         // Check whether the new location fix is more or less accurate
         int accuracyDelta = (int) (accuracy-location.accuracy);
 
-        boolean isLessAccurate = accuracyDelta > 0;
+        boolean isSlightlyLessAccurate = accuracyDelta > 0 && location.accuracy/accuracy > 0.9;
         boolean isMoreAccurate = accuracyDelta <= 0;
-        //Log.i("Accuracy Delta", String.valueOf(accuracyDelta));
+//        Log.i("isSlightlyLessAccurate",String.valueOf(location.accuracy/accuracy));
+//        Log.i("Accuracy Delta", String.valueOf(accuracyDelta));
+//        Log.i("New and Old Accuracy", String.valueOf(location.accuracy) + " " +String.valueOf(accuracy));
+
 
         // Determine location quality using a combination of timeliness and accuracy
-        if (isMoreAccurate) {
+        if (isMoreAccurate ) {
             //Log.i("Location Changed", "isMoreAccuate");
             return true;
-        } else if (isNewer && !isLessAccurate) {
+        } else if (isNewer && isSlightlyLessAccurate) {
             //Log.i("Location Changed", "isNewer && !isLessAccurate");
             return true;
         }

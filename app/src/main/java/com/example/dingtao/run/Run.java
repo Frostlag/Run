@@ -26,6 +26,7 @@ public class Run {
     public double averageSpeed,topSpeed;
     public long duration;
     public long begin;
+    public Location mostAccurateSoFar;
 
     public void ForceAddLocation(Location location){
         LocationJSON locationJSON = new LocationJSON(location);
