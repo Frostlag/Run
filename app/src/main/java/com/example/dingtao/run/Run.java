@@ -43,14 +43,14 @@ public class Run {
         LocationJSON locationJSON = new LocationJSON(location);
         LocationJSON lastLocation = tracks.get(tracks.size()-1);
         if (!lastLocation.IsBetterLocation(locationJSON)){
-            if (locationJSON.time - lastLocation.time > Model.Get().max_time){
-                ForceAddLocation(mostAccurateSoFar);
-                mostAccurateSoFar = null;
-            }
             if (mostAccurateSoFar == null){
                 mostAccurateSoFar = location;
             }else if (location.getAccuracy() > mostAccurateSoFar.getAccuracy()){
                 mostAccurateSoFar = location;
+            }
+            if (locationJSON.time - lastLocation.time > Model.Get().max_time){
+                ForceAddLocation(mostAccurateSoFar);
+                mostAccurateSoFar = null;
             }
             return false;
         }
