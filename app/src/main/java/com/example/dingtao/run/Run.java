@@ -1,5 +1,6 @@
 package com.example.dingtao.run;
 
+import android.graphics.AvoidXfermode;
 import android.location.Location;
 import android.util.Log;
 
@@ -41,7 +42,18 @@ public class Run {
     public boolean AddLocation(Location location){
         LocationJSON locationJSON = new LocationJSON(location);
         LocationJSON lastLocation = tracks.get(tracks.size()-1);
-        if (!lastLocation.IsBetterLocation(locationJSON)) return false;
+        if (!lastLocation.IsBetterLocation(locationJSON)){
+            if (locationJSON.time - lastLocation.time > Model.Get().max_time){
+                ForceAddLocation(mostAccurateSoFar);
+                mostAccurateSoFar = null;
+            }
+            if (mostAccurateSoFar == null){
+                mostAccurateSoFar = location;
+            }else if (location.getAccuracy() > mostAccurateSoFar.getAccuracy()){
+                mostAccurateSoFar = location;
+            }
+            return false;
+        }
         else{
             tracks.add(locationJSON);
             distance += location.distanceTo(lastLocation.ToLocation());
