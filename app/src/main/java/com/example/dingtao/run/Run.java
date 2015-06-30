@@ -55,6 +55,7 @@ public class Run {
             return false;
         }
         else{
+            mostAccurateSoFar = null;
             tracks.add(locationJSON);
             distance += location.distanceTo(lastLocation.ToLocation());
             duration = tracks.get(tracks.size()-1).time - tracks.get(0).time;
