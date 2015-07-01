@@ -53,21 +53,31 @@ public class RunActivity extends ActionBarActivity  {
         duration.setText("Duration:" + run.DurationToTime());
         averageSpeed.setText("Speed:" + run.SpeedToKmPH());
 
-        YAxis yAxis = speedChart.getAxisLeft();
+        YAxis speedAxis = speedChart.getAxisLeft();
+        speedAxis.setEnabled(true);
+        speedAxis.setDrawAxisLine(true);
+        speedAxis.setDrawLabels(true);
+        speedAxis.setDrawGridLines(false);
+
+        YAxis rightAxis = speedChart.getAxisRight();
+        rightAxis.setEnabled(true);
+        rightAxis.setDrawAxisLine(true);
+        rightAxis.setDrawLabels(true);
+        rightAxis.setDrawGridLines(false);
+
+
         XAxis xAxis = speedChart.getXAxis();
-        yAxis.setEnabled(true);
         xAxis.setEnabled(true);
-        yAxis.setDrawAxisLine(true);
         xAxis.setDrawAxisLine(true);
-        yAxis.setDrawLabels(true);
         xAxis.setDrawLabels(true);
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setDrawGridLines(false);
-        yAxis.setDrawGridLines(false);
+
+
         ArrayList<LineDataSet> dataSets = new ArrayList<LineDataSet>();
         ArrayList<String> xVals = new ArrayList<String>();
-        ArrayList<Entry> vals = new ArrayList<Entry>();
-
+        ArrayList<Entry> speed = new ArrayList<Entry>();
+        ArrayList<Entry> rightData = new ArrayList<Entry>();
         for (LocationJSON locationJSON : run.tracks){
             long durationtime = locationJSON.time - run.begin;
             long second = (durationtime / 1000) % 60;
@@ -76,8 +86,10 @@ public class RunActivity extends ActionBarActivity  {
             xVals.add(String.format("%02d:%02d:%02d", hour, minute, second));
 
             Entry entry = new Entry((float)(locationJSON.speed*3.6),(int)durationtime / 1000);
+            Entry rightEntry = new Entry((float)locationJSON.accuracy,(int)durationtime / 1000);
             //Entry entry = new Entry((float)(locationJSON.speed*3.6),i);
-            vals.add(entry);
+            speed.add(entry);
+            rightData.add(rightEntry);
             Log.i("Entry",entry.toString());
         }
 //        Entry e1 = new Entry(50f,0);
@@ -87,13 +99,19 @@ public class RunActivity extends ActionBarActivity  {
 //        xVals.add("TEST1");
 //        xVals.add("TEST2");
 
+        String rightDataSetLabel = "Accuracy";
 
-        LineDataSet speedDataSet = new LineDataSet(vals,"Speed");
+        LineDataSet rightDataSet = new LineDataSet(rightData,rightDataSetLabel);
+        rightDataSet.setColor(Color.RED);
+        rightDataSet.setAxisDependency(YAxis.AxisDependency.RIGHT); 
+
+        LineDataSet speedDataSet = new LineDataSet(speed,"Speed");
         speedDataSet.setAxisDependency(YAxis.AxisDependency.LEFT);
         speedDataSet.setLineWidth(2);
         speedDataSet.setDrawValues(true);
 
         dataSets.add(speedDataSet);
+        dataSets.add(rightDataSet);
         LineData data = new LineData(xVals,dataSets);
         speedChart.setData(data);
         speedChart.invalidate();
