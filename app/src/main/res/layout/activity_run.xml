@@ -1,4 +1,4 @@
-<ScrollView
+<LinearLayout
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     xmlns:android="http://schemas.android.com/apk/res/android">
@@ -45,7 +45,36 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </LinearLayout>
-        <fragment
+        <TabHost
+            android:id="@+id/tabhost"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
+                <TabWidget
+                    android:id="@android:id/tabs"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content" />
+                <FrameLayout
+                    android:id="@android:id/tabcontent"
+                    android:layout_height="wrap_content"
+                    android:layout_width="fill_parent">
+                    <TextView
+                        android:id="@+id/tab1"
+                        android:text="TAB1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                    <TextView
+                        android:id="@+id/tab2"
+                        android:text="TAB2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </FrameLayout>
+            </LinearLayout>
+        </TabHost>
+        <!--<fragment
             android:id="@+id/Map"
             android:layout_width="match_parent"
             android:layout_height="350dp"
@@ -55,6 +84,6 @@
             android:layout_marginTop="5dp"
             android:id="@+id/speed_chart"
             android:layout_width="match_parent"
-            android:layout_height="350dp" />
+            android:layout_height="350dp" /> -->
     </LinearLayout>
-</ScrollView>
+</LinearLayout>
