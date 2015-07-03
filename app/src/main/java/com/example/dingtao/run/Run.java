@@ -36,7 +36,6 @@ public class Run {
         distance += location.distanceTo(lastLocation.ToLocation());
         duration = tracks.get(tracks.size()-1).time - tracks.get(0).time;
         averageSpeed = distance / (duration / 1000);
-        if (locationJSON.speed > topSpeed) topSpeed = locationJSON.speed;
     }
 
     public boolean AddLocation(Location location){
@@ -60,7 +59,6 @@ public class Run {
             distance += location.distanceTo(lastLocation.ToLocation());
             duration = tracks.get(tracks.size() - 1).time - tracks.get(0).time;
             averageSpeed = distance / (duration / 1000);
-            if (locationJSON.speed > topSpeed) topSpeed = locationJSON.speed;
             //Log.i("OLD LOCATION", String.valueOf(lastLocation.accuracy));
             //Log.i("NEW LOCATION", String.valueOf(locationJSON.accuracy));
             return true;
@@ -84,7 +82,7 @@ public class Run {
     }
 
     public Run(Location location){
-        name = "";
+        name = null;
         distance = 0;
         averageSpeed = location.getSpeed();
         begin = location.getTime();

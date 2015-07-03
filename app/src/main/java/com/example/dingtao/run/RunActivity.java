@@ -1,5 +1,8 @@
 package com.example.dingtao.run;
 
+import android.app.Activity;
+import android.app.Fragment;
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -7,6 +10,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
+import android.widget.TabHost;
+import android.widget.TabWidget;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.LineChart;
@@ -30,7 +35,7 @@ import java.util.Date;
 import java.util.List;
 
 
-public class RunActivity extends ActionBarActivity  {
+public class RunActivity extends Activity {
     int rid;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,39 +51,69 @@ public class RunActivity extends ActionBarActivity  {
         TextView distance = (TextView) findViewById(R.id.distance);
         TextView duration = (TextView) findViewById(R.id.duration);
         TextView averageSpeed = (TextView) findViewById(R.id.average_speed);
-        LineChart speedChart = (LineChart) findViewById(R.id.speed_chart);
+
         name.setText(run.name);
         begin.setText("Started: " + run.StartedToTime());
         distance.setText("Distance:" + run.DistanceToKm());
         duration.setText("Duration:" + run.DurationToTime());
         averageSpeed.setText("Speed:" + run.SpeedToKmPH());
 
-        YAxis yAxis = speedChart.getAxisLeft();
+        TabHost tabHost = (TabHost) findViewById(R.id.tabhost);
+        tabHost.setup();
+
+        TabHost.TabSpec tab1 = tabHost.newTabSpec("Map");
+        tab1.setIndicator("Map");
+        tab1.setContent(R.id.map);
+        tabHost.addTab(tab1);
+
+        TabHost.TabSpec tab2 = tabHost.newTabSpec("Speed");
+        tab2.setIndicator("Speed");
+        tab2.setContent(R.id.speed_chart);
+        tabHost.addTab(tab2);
+
+
+
+        LineChart speedChart = (LineChart) findViewById(R.id.speed_chart);
+        YAxis speedAxis = speedChart.getAxisLeft();
+        speedAxis.setEnabled(true);
+        speedAxis.setDrawAxisLine(true);
+        speedAxis.setDrawLabels(true);
+        speedAxis.setDrawGridLines(false);
+        speedAxis.setStartAtZero(true);
+
+        YAxis rightAxis = speedChart.getAxisRight();
+        rightAxis.setEnabled(true);
+        rightAxis.setDrawAxisLine(true);
+        rightAxis.setDrawLabels(true);
+        rightAxis.setDrawGridLines(false);
+
+
         XAxis xAxis = speedChart.getXAxis();
-        yAxis.setEnabled(true);
         xAxis.setEnabled(true);
-        yAxis.setDrawAxisLine(true);
         xAxis.setDrawAxisLine(true);
-        yAxis.setDrawLabels(true);
         xAxis.setDrawLabels(true);
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setDrawGridLines(false);
-        yAxis.setDrawGridLines(false);
+        xAxis.setLabelsToSkip(0);
+
+
         ArrayList<LineDataSet> dataSets = new ArrayList<LineDataSet>();
         ArrayList<String> xVals = new ArrayList<String>();
-        ArrayList<Entry> vals = new ArrayList<Entry>();
-
+        ArrayList<Entry> speed = new ArrayList<Entry>();
+        ArrayList<Entry> rightData = new ArrayList<Entry>();
         for (LocationJSON locationJSON : run.tracks){
             long durationtime = locationJSON.time - run.begin;
             long second = (durationtime / 1000) % 60;
-            long minute = (durationtime / (1000 * 60)) % 60;
-            long hour = (durationtime / (1000 * 60 * 60)) % 24;
-            xVals.add(String.format("%02d:%02d:%02d", hour, minute, second));
+            long minute = (durationtime / (1000 * 60));
+            xVals.add(String.format("%02d:%02d", minute, second));
 
             Entry entry = new Entry((float)(locationJSON.speed*3.6),(int)durationtime / 1000);
+            Entry rightEntry = new Entry((float)locationJSON.accuracy,(int)durationtime / 1000);
             //Entry entry = new Entry((float)(locationJSON.speed*3.6),i);
-            vals.add(entry);
-            Log.i("Entry",entry.toString());
+            speed.add(entry);
+            rightData.add(rightEntry);
+            //Log.i("Entry", entry.toString());
+            //Log.i("rightEntry",rightEntry.toString());
         }
 //        Entry e1 = new Entry(50f,0);
 //        Entry e2 = new Entry(25f,1);
@@ -87,19 +122,27 @@ public class RunActivity extends ActionBarActivity  {
 //        xVals.add("TEST1");
 //        xVals.add("TEST2");
 
+        String rightDataSetLabel = "Accuracy";
 
-        LineDataSet speedDataSet = new LineDataSet(vals,"Speed");
+        LineDataSet rightDataSet = new LineDataSet(rightData,rightDataSetLabel);
+        rightDataSet.setColor(Color.RED);
+        rightDataSet.setAxisDependency(YAxis.AxisDependency.RIGHT); 
+
+        LineDataSet speedDataSet = new LineDataSet(speed,"Speed");
         speedDataSet.setAxisDependency(YAxis.AxisDependency.LEFT);
         speedDataSet.setLineWidth(2);
         speedDataSet.setDrawValues(true);
 
         dataSets.add(speedDataSet);
+        dataSets.add(rightDataSet);
         LineData data = new LineData(xVals,dataSets);
         speedChart.setData(data);
         speedChart.invalidate();
+        speedChart.setPinchZoom(true);
+        Log.i("Entry", rightData.toString());
+        Log.i("Entry", xVals.toString());
 
-
-        final GoogleMap map = ((MapFragment) getFragmentManager().findFragmentById(R.id.Map)).getMap();
+        final GoogleMap map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
 
         PolylineOptions options = new PolylineOptions().width(5).color(Color.BLUE).geodesic(true);
         for (LocationJSON locationJSON : run.tracks){
@@ -117,6 +160,7 @@ public class RunActivity extends ActionBarActivity  {
                 map.moveCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), 50));
             }
         });
+
     }
 
     @Override
