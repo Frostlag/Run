@@ -63,16 +63,16 @@ public class RunActivity extends Activity {
 
         TabHost.TabSpec tab1 = tabHost.newTabSpec("Map");
         tab1.setIndicator("Map");
-        tab1.setContent(R.id.tab1);
+        tab1.setContent(R.id.map);
         tabHost.addTab(tab1);
 
         TabHost.TabSpec tab2 = tabHost.newTabSpec("Speed");
         tab2.setIndicator("Speed");
-        tab2.setContent(R.id.tab2);
+        tab2.setContent(R.id.speed_chart);
         tabHost.addTab(tab2);
 
 
-        /*
+
         LineChart speedChart = (LineChart) findViewById(R.id.speed_chart);
         YAxis speedAxis = speedChart.getAxisLeft();
         speedAxis.setEnabled(true);
@@ -142,7 +142,7 @@ public class RunActivity extends Activity {
         Log.i("Entry", rightData.toString());
         Log.i("Entry", xVals.toString());
 
-        final GoogleMap map = ((MapFragment) getFragmentManager().findFragmentById(R.id.Map)).getMap();
+        final GoogleMap map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
 
         PolylineOptions options = new PolylineOptions().width(5).color(Color.BLUE).geodesic(true);
         for (LocationJSON locationJSON : run.tracks){
@@ -160,7 +160,7 @@ public class RunActivity extends Activity {
                 map.moveCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), 50));
             }
         });
-        */
+
     }
 
     @Override

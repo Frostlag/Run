@@ -61,29 +61,20 @@
                     android:id="@android:id/tabcontent"
                     android:layout_height="wrap_content"
                     android:layout_width="fill_parent">
-                    <TextView
-                        android:id="@+id/tab1"
-                        android:text="TAB1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-                    <TextView
-                        android:id="@+id/tab2"
-                        android:text="TAB2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                    <fragment
+                        android:id="@+id/map"
+                        android:layout_width="match_parent"
+                        android:layout_height="350dp"
+                        class="com.google.android.gms.maps.MapFragment" />
+                    <com.github.mikephil.charting.charts.LineChart
+                        android:layout_marginTop="5dp"
+                        android:id="@+id/speed_chart"
+                        android:layout_width="match_parent"
+                        android:layout_height="350dp" />
                 </FrameLayout>
             </LinearLayout>
         </TabHost>
-        <!--<fragment
-            android:id="@+id/Map"
-            android:layout_width="match_parent"
-            android:layout_height="350dp"
-            class="com.google.android.gms.maps.MapFragment" />
 
-        <com.github.mikephil.charting.charts.LineChart
-            android:layout_marginTop="5dp"
-            android:id="@+id/speed_chart"
-            android:layout_width="match_parent"
-            android:layout_height="350dp" /> -->
+
     </LinearLayout>
 </LinearLayout>
