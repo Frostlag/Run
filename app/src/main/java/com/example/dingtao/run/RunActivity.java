@@ -75,17 +75,21 @@ public class RunActivity extends Activity {
         speedChart.setInteractive(true);
         speedChart.setZoomType(ZoomType.HORIZONTAL_AND_VERTICAL);
 
-        List<PointValue> values = new ArrayList<PointValue>();
+        List<PointValue> speedValues = new ArrayList<PointValue>();
+        List<PointValue> accuracyValues = new ArrayList<PointValue>();
         for (LocationJSON locationJSON : run.tracks){
             long durationtime = locationJSON.time - run.begin;
             long second = (durationtime / 1000) % 60;
             long minute = (durationtime / (1000 * 60));
             //values.add(String.format("%02d:%02d", minute, second));
-            values.add(new PointValue((int) durationtime,(float)locationJSON.speed));
+            speedValues.add(new PointValue((int) durationtime,(float)locationJSON.speed));
+            accuracyValues.add(new PointValue((int) durationtime,(float)locationJSON.accuracy));
         }
-        Line line = new Line(values).setColor(Color.BLUE);
+        Line speedLine = new Line(speedValues).setColor(Color.BLUE);
+        Line accuracyLine = new Line(accuracyValues).setColor(Color.RED);
         List<Line> lines = new ArrayList<Line>();
-        lines.add(line);
+        lines.add(speedLine);
+        lines.add(accuracyLine);
         LineChartData data = new LineChartData().setLines(lines);
         speedChart.setLineChartData(data);
 
