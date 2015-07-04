@@ -14,12 +14,6 @@ import android.widget.TabHost;
 import android.widget.TabWidget;
 import android.widget.TextView;
 
-import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.components.YAxis;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.LineData;
-import com.github.mikephil.charting.data.LineDataSet;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -33,6 +27,12 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import lecho.lib.hellocharts.gesture.ZoomType;
+import lecho.lib.hellocharts.model.Line;
+import lecho.lib.hellocharts.model.LineChartData;
+import lecho.lib.hellocharts.model.PointValue;
+import lecho.lib.hellocharts.view.LineChartView;
 
 
 public class RunActivity extends Activity {
@@ -71,76 +71,93 @@ public class RunActivity extends Activity {
         tab2.setContent(R.id.speed_chart);
         tabHost.addTab(tab2);
 
+        LineChartView speedChart = (LineChartView) findViewById(R.id.speed_chart);
+        speedChart.setInteractive(true);
+        speedChart.setZoomType(ZoomType.HORIZONTAL_AND_VERTICAL);
 
-
-        LineChart speedChart = (LineChart) findViewById(R.id.speed_chart);
-        YAxis speedAxis = speedChart.getAxisLeft();
-        speedAxis.setEnabled(true);
-        speedAxis.setDrawAxisLine(true);
-        speedAxis.setDrawLabels(true);
-        speedAxis.setDrawGridLines(false);
-        speedAxis.setStartAtZero(true);
-
-        YAxis rightAxis = speedChart.getAxisRight();
-        rightAxis.setEnabled(true);
-        rightAxis.setDrawAxisLine(true);
-        rightAxis.setDrawLabels(true);
-        rightAxis.setDrawGridLines(false);
-
-
-        XAxis xAxis = speedChart.getXAxis();
-        xAxis.setEnabled(true);
-        xAxis.setDrawAxisLine(true);
-        xAxis.setDrawLabels(true);
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        xAxis.setDrawGridLines(false);
-        xAxis.setLabelsToSkip(0);
-
-
-        ArrayList<LineDataSet> dataSets = new ArrayList<LineDataSet>();
-        ArrayList<String> xVals = new ArrayList<String>();
-        ArrayList<Entry> speed = new ArrayList<Entry>();
-        ArrayList<Entry> rightData = new ArrayList<Entry>();
+        List<PointValue> values = new ArrayList<PointValue>();
         for (LocationJSON locationJSON : run.tracks){
             long durationtime = locationJSON.time - run.begin;
             long second = (durationtime / 1000) % 60;
             long minute = (durationtime / (1000 * 60));
-            xVals.add(String.format("%02d:%02d", minute, second));
-
-            Entry entry = new Entry((float)(locationJSON.speed*3.6),(int)durationtime / 1000);
-            Entry rightEntry = new Entry((float)locationJSON.accuracy,(int)durationtime / 1000);
-            //Entry entry = new Entry((float)(locationJSON.speed*3.6),i);
-            speed.add(entry);
-            rightData.add(rightEntry);
-            //Log.i("Entry", entry.toString());
-            //Log.i("rightEntry",rightEntry.toString());
+            //values.add(String.format("%02d:%02d", minute, second));
+            values.add(new PointValue((int) durationtime,(float)locationJSON.speed));
         }
-//        Entry e1 = new Entry(50f,0);
-//        Entry e2 = new Entry(25f,1);
-//        vals.add(e1);
-//        vals.add(e2);
-//        xVals.add("TEST1");
-//        xVals.add("TEST2");
+        Line line = new Line(values).setColor(Color.BLUE);
+        List<Line> lines = new ArrayList<Line>();
+        lines.add(line);
+        LineChartData data = new LineChartData().setLines(lines);
+        speedChart.setLineChartData(data);
 
-        String rightDataSetLabel = "Accuracy";
 
-        LineDataSet rightDataSet = new LineDataSet(rightData,rightDataSetLabel);
-        rightDataSet.setColor(Color.RED);
-        rightDataSet.setAxisDependency(YAxis.AxisDependency.RIGHT); 
-
-        LineDataSet speedDataSet = new LineDataSet(speed,"Speed");
-        speedDataSet.setAxisDependency(YAxis.AxisDependency.LEFT);
-        speedDataSet.setLineWidth(2);
-        speedDataSet.setDrawValues(true);
-
-        dataSets.add(speedDataSet);
-        dataSets.add(rightDataSet);
-        LineData data = new LineData(xVals,dataSets);
-        speedChart.setData(data);
-        speedChart.invalidate();
-        speedChart.setPinchZoom(true);
-        Log.i("Entry", rightData.toString());
-        Log.i("Entry", xVals.toString());
+//        LineChart speedChart = (LineChart) findViewById(R.id.speed_chart);
+//        YAxis speedAxis = speedChart.getAxisLeft();
+//        speedAxis.setEnabled(true);
+//        speedAxis.setDrawAxisLine(true);
+//        speedAxis.setDrawLabels(true);
+//        speedAxis.setDrawGridLines(false);
+//        speedAxis.setStartAtZero(true);
+//
+//        YAxis rightAxis = speedChart.getAxisRight();
+//        rightAxis.setEnabled(true);
+//        rightAxis.setDrawAxisLine(true);
+//        rightAxis.setDrawLabels(true);
+//        rightAxis.setDrawGridLines(false);
+//
+//
+//        XAxis xAxis = speedChart.getXAxis();
+//        xAxis.setEnabled(true);
+//        xAxis.setDrawAxisLine(true);
+//        xAxis.setDrawLabels(true);
+//        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+//        xAxis.setDrawGridLines(false);
+//        xAxis.setLabelsToSkip(0);
+//
+//
+//        ArrayList<LineDataSet> dataSets = new ArrayList<LineDataSet>();
+//        ArrayList<String> xVals = new ArrayList<String>();
+//        ArrayList<Entry> speed = new ArrayList<Entry>();
+//        ArrayList<Entry> rightData = new ArrayList<Entry>();
+//        for (LocationJSON locationJSON : run.tracks){
+//            long durationtime = locationJSON.time - run.begin;
+//            long second = (durationtime / 1000) % 60;
+//            long minute = (durationtime / (1000 * 60));
+//            xVals.add(String.format("%02d:%02d", minute, second));
+//
+//            Entry entry = new Entry((float)(locationJSON.speed*3.6),(int)durationtime / 1000);
+//            Entry rightEntry = new Entry((float)locationJSON.accuracy,(int)durationtime / 1000);
+//            //Entry entry = new Entry((float)(locationJSON.speed*3.6),i);
+//            speed.add(entry);
+//            rightData.add(rightEntry);
+//            //Log.i("Entry", entry.toString());
+//            //Log.i("rightEntry",rightEntry.toString());
+//        }
+////        Entry e1 = new Entry(50f,0);
+////        Entry e2 = new Entry(25f,1);
+////        vals.add(e1);
+////        vals.add(e2);
+////        xVals.add("TEST1");
+////        xVals.add("TEST2");
+//
+//        String rightDataSetLabel = "Accuracy";
+//
+//        LineDataSet rightDataSet = new LineDataSet(rightData,rightDataSetLabel);
+//        rightDataSet.setColor(Color.RED);
+//        rightDataSet.setAxisDependency(YAxis.AxisDependency.RIGHT);
+//
+//        LineDataSet speedDataSet = new LineDataSet(speed,"Speed");
+//        speedDataSet.setAxisDependency(YAxis.AxisDependency.LEFT);
+//        speedDataSet.setLineWidth(2);
+//        speedDataSet.setDrawValues(true);
+//
+//        dataSets.add(speedDataSet);
+//        dataSets.add(rightDataSet);
+//        LineData data = new LineData(xVals,dataSets);
+//        speedChart.setData(data);
+//        speedChart.invalidate();
+//        speedChart.setPinchZoom(true);
+//        Log.i("Entry", rightData.toString());
+//        Log.i("Entry", xVals.toString());
 
         final GoogleMap map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
 
