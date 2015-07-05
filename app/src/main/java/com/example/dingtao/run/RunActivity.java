@@ -76,6 +76,14 @@ public class RunActivity extends Activity {
         LineChartView speedChart = (LineChartView) findViewById(R.id.speed_chart);
         speedChart.setInteractive(true);
         speedChart.setZoomType(ZoomType.HORIZONTAL_AND_VERTICAL);
+        double maxSpeed = 0;
+        double maxAccuracy = 0;
+
+        for (LocationJSON locationJSON : run.tracks){
+            if (locationJSON.speed > maxSpeed) maxSpeed = locationJSON.speed;
+            if (locationJSON.accuracy > maxSpeed) maxAccuracy = locationJSON.accuracy;
+        }
+        double speedtoAccuracy = maxSpeed/maxAccuracy;
 
         List<PointValue> speedValues = new ArrayList<PointValue>();
         List<PointValue> accuracyValues = new ArrayList<PointValue>();
@@ -86,7 +94,12 @@ public class RunActivity extends Activity {
             //values.add(String.format("%02d:%02d", minute, second));
             speedValues.add(new PointValue((int) durationtime,(float)locationJSON.speed));
             accuracyValues.add(new PointValue((int) durationtime,(float)locationJSON.accuracy));
+            if (locationJSON.speed > maxSpeed) maxSpeed = locationJSON.speed;
+            if (locationJSON.accuracy > maxSpeed) maxAccuracy = locationJSON.accuracy;
         }
+
+
+        
         List<Line> lines = new ArrayList<Line>();
 
         Line speedLine = new Line(speedValues).setColor(Color.BLUE);
