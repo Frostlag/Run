@@ -89,13 +89,8 @@ public class RunActivity extends Activity {
         List<PointValue> accuracyValues = new ArrayList<PointValue>();
         for (LocationJSON locationJSON : run.tracks){
             long durationtime = locationJSON.time - run.begin;
-            long second = (durationtime / 1000) % 60;
-            long minute = (durationtime / (1000 * 60));
-            //values.add(String.format("%02d:%02d", minute, second));
             speedValues.add(new PointValue((int) durationtime,(float)locationJSON.speed));
-            accuracyValues.add(new PointValue((int) durationtime,(float)locationJSON.accuracy));
-            if (locationJSON.speed > maxSpeed) maxSpeed = locationJSON.speed;
-            if (locationJSON.accuracy > maxSpeed) maxAccuracy = locationJSON.accuracy;
+            accuracyValues.add(new PointValue((int) durationtime,(float)(locationJSON.accuracy * speedtoAccuracy)));
         }
 
 
