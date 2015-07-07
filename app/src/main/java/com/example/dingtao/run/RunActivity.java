@@ -115,7 +115,7 @@ public class RunActivity extends Activity {
 
         Axis timeAxis = new Axis(timeValues).setName("Time").setHasLines(true).setTextColor(Color.BLACK);
         data.setAxisXBottom(timeAxis);
-        Axis speedAxis = new Axis().setName("Speed").setHasLines(true).setTextColor(Color.BLUE).setFormatter(new SimpleAxisValueFormatter().setAppendedText("km/h".toCharArray()));
+        Axis speedAxis = new Axis().setName("Speed (km/h)").setHasLines(true).setTextColor(Color.BLUE);
         data.setAxisYLeft(speedAxis);
         Axis accuracyAxis = new Axis().setName("Accuracy").setHasLines(true).setTextColor(Color.RED).setFormatter(new AccuracyFormatter(speedtoAccuracy));
         data.setAxisYRight(accuracyAxis);

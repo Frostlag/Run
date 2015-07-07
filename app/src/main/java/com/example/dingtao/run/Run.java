@@ -36,6 +36,7 @@ public class Run {
         distance += location.distanceTo(lastLocation.ToLocation());
         duration = tracks.get(tracks.size()-1).time - tracks.get(0).time;
         averageSpeed = distance / (duration / 1000);
+        mostAccurateSoFar = null;
     }
 
     public boolean AddLocation(Location location){
@@ -44,25 +45,11 @@ public class Run {
         if (mostAccurateSoFar == null || location.getAccuracy() > mostAccurateSoFar.getAccuracy()){
             mostAccurateSoFar = location;
         }
-
-        if (locationJSON.time - lastLocation.time > Model.Get().max_time) {
+        if (location.getTime() - lastLocation.time > Model.Get().max_time ||  mostAccurateSoFar.getAccuracy() > lastLocation.accuracy) {
             ForceAddLocation(mostAccurateSoFar);
-            mostAccurateSoFar = location;
             return true;
         }
-
-        if (!lastLocation.IsBetterLocation(locationJSON)) {
-            return false;
-        } else {
-            mostAccurateSoFar = null;
-            tracks.add(locationJSON);
-            distance += location.distanceTo(lastLocation.ToLocation());
-            duration = tracks.get(tracks.size() - 1).time - tracks.get(0).time;
-            averageSpeed = distance / (duration / 1000);
-            //Log.i("OLD LOCATION", String.valueOf(lastLocation.accuracy));
-            //Log.i("NEW LOCATION", String.valueOf(locationJSON.accuracy));
-            return true;
-        }
+        return false;
     }
 
     public JSONObject ToJSONObject() throws JSONException{
