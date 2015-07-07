@@ -84,6 +84,7 @@ public class RunActivity extends Activity {
             if (locationJSON.speed > maxSpeed) maxSpeed = locationJSON.speed;
             if (locationJSON.accuracy > maxAccuracy) maxAccuracy = locationJSON.accuracy;
         }
+        maxSpeed = maxSpeed *3.6;
         double speedtoAccuracy = maxSpeed/maxAccuracy;
 
         List<PointValue> speedValues = new ArrayList<PointValue>();
@@ -91,7 +92,7 @@ public class RunActivity extends Activity {
         for (LocationJSON locationJSON : run.tracks){
             long durationtime = locationJSON.time - run.begin;
             //values.add(String.format("%02d:%02d", minute, second));
-            speedValues.add(new PointValue((int) durationtime,(float)(locationJSON.speed)));
+            speedValues.add(new PointValue((int) durationtime,(float)(locationJSON.speed*3.6)));
             accuracyValues.add(new PointValue((int) durationtime,(float)(locationJSON.accuracy*speedtoAccuracy)));
         }
 
@@ -109,9 +110,9 @@ public class RunActivity extends Activity {
 
         Axis timeAxis = new Axis().setName("Time").setHasLines(true).setTextColor(Color.BLACK);
         data.setAxisXBottom(timeAxis);
-        Axis speedAxis = new Axis().setName("Speed").setHasLines(true).setTextColor(Color.BLACK);
+        Axis speedAxis = new Axis().setName("Speed").setHasLines(true).setTextColor(Color.BLUE).setFormatter(new SimpleAxisValueFormatter().setAppendedText("km/h".toCharArray()));
         data.setAxisYLeft(speedAxis);
-        Axis accuracyAxis = new Axis().setName("Accuracy").setHasLines(true).setTextColor(Color.BLACK).setFormatter(new AccuracyFormatter(speedtoAccuracy));
+        Axis accuracyAxis = new Axis().setName("Accuracy").setHasLines(true).setTextColor(Color.RED).setFormatter(new AccuracyFormatter(speedtoAccuracy));
         data.setAxisYRight(accuracyAxis);
 
         speedChart.setLineChartData(data);
