@@ -3,6 +3,7 @@ package com.example.dingtao.run;
 import android.graphics.AvoidXfermode;
 import android.location.Location;
 import android.util.Log;
+import android.widget.Toast;
 
 
 import com.google.android.gms.location.LocationServices;
@@ -37,6 +38,9 @@ public class Run {
         duration = tracks.get(tracks.size()-1).time - tracks.get(0).time;
         averageSpeed = distance / (duration / 1000);
         mostAccurateSoFar = null;
+        Toast.makeText(Model.Get().main,
+                "Old accuracy: " + lastLocation.accuracy + ", New accuracy: " + locationJSON.accuracy, Toast.LENGTH_LONG)
+                .show();
     }
 
     public boolean AddLocation(Location location){

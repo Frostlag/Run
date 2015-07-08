@@ -52,7 +52,7 @@ public class Model implements GoogleApiClient.ConnectionCallbacks, GoogleApiClie
     private static Model instance;
     private static Boolean init = false;
     private Boolean connected = false;
-    private MainActivity main;
+    public MainActivity main;
     private List<UpdateableView> views;
     private String saveFile = "save.txt";
 
