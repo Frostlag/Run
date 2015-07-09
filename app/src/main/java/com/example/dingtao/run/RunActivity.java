@@ -39,7 +39,7 @@ import lecho.lib.hellocharts.model.Viewport;
 import lecho.lib.hellocharts.view.LineChartView;
 
 
-public class RunActivity extends Activity {
+public class RunActivity extends ActionBarActivity {
     int rid;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
