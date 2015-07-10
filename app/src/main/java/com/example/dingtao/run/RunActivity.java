@@ -50,6 +50,7 @@ public class RunActivity extends ActionBarActivity {
 
 
         setContentView(R.layout.activity_run);
+        setTitle(run.name);
         TextView name = (TextView) findViewById(R.id.name);
         TextView begin = (TextView) findViewById(R.id.begin);
         TextView distance = (TextView) findViewById(R.id.distance);
