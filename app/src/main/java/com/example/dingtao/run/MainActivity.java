@@ -143,6 +143,7 @@ public class MainActivity extends ActionBarActivity implements UpdateableView {
             startButton.setText(R.string.Start);
             time.stop();
             timebase = null;
+            startButton.setEnabled(true);
             //TODO:pauseButton.setText(R.string.Pause);
         }
     }
