@@ -138,13 +138,14 @@ public class MainActivity extends ActionBarActivity implements UpdateableView {
             startButton.setText(R.string.Stop);
             time.setBase(SystemClock.elapsedRealtime());
             time.start();
-            startButton.setEnabled(false);
+            saveButton.setEnabled(false);
         }
         else {
             startButton.setText(R.string.Start);
             time.stop();
             timebase = null;
-            startButton.setEnabled(true);
+            saveButton.setEnabled(true);
+            saveButton.setClickable(true);
             //TODO:pauseButton.setText(R.string.Pause);
         }
     }
